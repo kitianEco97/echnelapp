@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'package:echnelapp/src/data/services/services.dart';
 import '../../widgets/widgets.dart';
 import '../../ui/admin_routes.dart';
 
@@ -22,6 +24,19 @@ class _HomeAdminMainPageState extends State<HomeAdminMainPage> {
       });
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (this.mounted) {
+      // check whether the state object is in tree
+      setState(() {
+        // make changes here
+      });
+    }
+    final socketService = Provider.of<SocketService>(context, listen: false);
+    socketService.socket.off('viajes-activos');
+    super.dispose();
   }
 
   @override

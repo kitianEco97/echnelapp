@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:echnelapp/src/data/services/services.dart';
+import 'package:echnelapp/src/data/models/models.dart';
 //import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class AdminSessionPage extends StatelessWidget {
+class AdminSessionPage extends StatefulWidget {
   const AdminSessionPage({Key? key}) : super(key: key);
 
+  @override
+  State<AdminSessionPage> createState() => _AdminSessionPageState();
+}
+
+class _AdminSessionPageState extends State<AdminSessionPage> {
   @override
   Widget build(BuildContext context) {
     // Create storage
     // final storage = new FlutterSecureStorage();
-    // final socketService = Provider.of<SocketService>(context, listen: false);
+    final socketService = Provider.of<SocketService>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -29,14 +37,11 @@ class AdminSessionPage extends StatelessWidget {
         ),
         actions: [
           Container(
-            margin: EdgeInsets.only(right: 20),
-            alignment: Alignment.centerLeft,
-            child: Image.asset(
-              'assets/dv-logo.png',
-              width: 40,
-              height: 40,
-            ),
-          ),
+            margin: EdgeInsets.only(right: 10),
+            child: (socketService.serverStatus == ServerStatus.Online)
+                ? Icon(Icons.check_circle, color: Colors.blue)
+                : Icon(Icons.offline_bolt, color: Colors.red),
+          )
         ],
         title: const Text('Admin'),
       ),

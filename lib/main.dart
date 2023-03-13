@@ -32,6 +32,7 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => FirebaseServices()),
         ChangeNotifierProvider(create: (_) => ViajesService()),
+        ChangeNotifierProvider(create: (_) => SocketService()),
       ],
       child: MyApp(),
     );
@@ -44,8 +45,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Samella',
-      home: HomeAdminMainPage(),
-      //home: LoadingPage(),
+      //? STAUS: estado de la conexión al socket service
+      // initialRoute: 'status',
+      // home: HomeAdminMainPage(),
+      home: LoadingPage(),
       // home: LoginPage(),
       routes: {
         'admin/home': (context) => HomeAdminMainPage(),
@@ -55,6 +58,7 @@ class MyApp extends StatelessWidget {
         'viaje': (context) => AdminViajePage(),
         'login': (context) => LoginPage(),
         'register': (context) => RegisterPage(),
+        'status': (context) => StatusPage(),
       },
       scaffoldMessengerKey: NotificationsService.messengerKey,
       theme: ThemeData.light().copyWith(

@@ -29,7 +29,9 @@ class CheckAuthPage extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     PageRouteBuilder(
-                        pageBuilder: (_, __, ___) => UserHomeMainPage(),
+                        // final socketService = Provider.of<SocketService>(context);
+                        // pageBuilder: (_, __, ___) => UserHomeMainPage(),
+                        pageBuilder: (_, __, ___) => HomeAdminMainPage(),
                         transitionDuration: Duration(seconds: 0)));
               });
             }

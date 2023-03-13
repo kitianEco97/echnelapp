@@ -140,7 +140,7 @@ class _LoginForm extends StatelessWidget {
 
                           if (errorMessage == null) {
                             Navigator.pushReplacementNamed(
-                                context, 'user/home');
+                                context, 'admin/home');
                           } else {
                             NotificationsService.showSnackbar(
                                 'Revise sus credenciales porfavor');

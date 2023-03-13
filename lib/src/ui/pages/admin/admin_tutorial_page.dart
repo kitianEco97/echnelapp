@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:echnelapp/src/data/models/models.dart';
+import 'package:provider/provider.dart';
+
+import '../../../data/services/services.dart';
 
 class AdminTutorialPage extends StatefulWidget {
   const AdminTutorialPage({Key? key}) : super(key: key);
@@ -12,28 +15,18 @@ class AdminTutorialPage extends StatefulWidget {
 }
 
 class _AdminTutorialPageState extends State<AdminTutorialPage> {
-  List<Trip> trip = [
-    Trip(
-        id: '1',
-        name: 'santiago1008',
-        salida: '10:30',
-        descripcion: 'viaje con dirección a santiago'),
-    Trip(
-        id: '2',
-        name: 'til-til1120',
-        salida: '12:30',
-        descripcion: 'viaje con dirección a til-til'),
-    Trip(
-        id: '3',
-        name: 'santiago1340',
-        salida: '14:00',
-        descripcion: 'viaje con dirección a santiago'),
-    Trip(
-        id: '4',
-        name: 'til-til1421',
-        salida: '10:30',
-        descripcion: 'viaje con dirección a til til'),
-  ];
+  List<Trip> trips = [];
+  @override
+  void initState() {
+    final socketService = Provider.of<SocketService>(context, listen: false);
+    socketService.socket.on('viajes-activos', _handleActiveTrips);
+    super.initState();
+  }
+
+  _handleActiveTrips(dynamic payload) {
+    trips = (payload as List).map((band) => Trip.fromMap(band)).toList();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +39,8 @@ class _AdminTutorialPageState extends State<AdminTutorialPage> {
                 backgroundColor: Colors.lightGreenAccent.shade700)),
       ),
       body: ListView.builder(
-        itemCount: trip.length,
-        itemBuilder: (context, i) => _tripTile(trip[i]),
+        itemCount: trips.length,
+        itemBuilder: (context, i) => _tripTile(trips[i]),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -58,14 +51,12 @@ class _AdminTutorialPageState extends State<AdminTutorialPage> {
   }
 
   Widget _tripTile(Trip trip) {
+    // setState(() {});
+    final socketService = Provider.of<SocketService>(context);
     return Dismissible(
+      key: Key(trip.id),
       direction: DismissDirection.startToEnd,
-      onDismissed: (DismissDirection direction) {
-        print('direction: $direction');
-        print('id: ${trip.id}');
-        // TODO: LLAMAR EL BORRADO DEL SERVER
-      },
-      key: Key(trip.id!),
+      onDismissed: (_) => socketService.emit('delete-trip', {'id': trip.id}),
       background: Container(
         padding: EdgeInsets.only(left: 10),
         color: Colors.red,
@@ -78,17 +69,16 @@ class _AdminTutorialPageState extends State<AdminTutorialPage> {
       ),
       child: ListTile(
         leading: CircleAvatar(
-          child: Text(trip.name!.substring(0, 2)),
+          child: Text(trip.nombre!.substring(0, 2)),
           backgroundColor: Colors.blue[100],
         ),
-        title: Text(trip.name!),
+        title: Text(trip.nombre!),
         trailing: Text(
           '${trip.salida}',
           style: TextStyle(fontSize: 20),
         ),
-        onTap: () {
-          print(trip.name);
-        },
+        //? DE ESTA FORMA SE PUEDE EMITIR LA UBICACION DEL CONDUCTOR
+        onTap: () => socketService.socket.emit('vote-trip', {'id': trip.id}),
       ),
     );
   }
@@ -96,119 +86,90 @@ class _AdminTutorialPageState extends State<AdminTutorialPage> {
   addNewViaje() {
     final textNombreController = new TextEditingController();
     final textSalidaController = new TextEditingController();
-    final textComentariosController = new TextEditingController();
-    final textLatLngController = new TextEditingController();
 
     if (Platform.isAndroid) {
       //* ANDROID
       showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Nuevo Viaje'),
-            content: Container(
-              height: 300,
-              child: Column(
-                children: [
-                  Text('nombre', style: TextStyle()),
-                  TextField(controller: textNombreController),
-                  SizedBox(height: 5),
-                  Text('salida', style: TextStyle()),
-                  TextField(
-                    controller: textSalidaController,
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text('Nuevo Viaje'),
+                content: Container(
+                  height: 300,
+                  child: Column(
+                    children: [
+                      Text('nombre', style: TextStyle()),
+                      TextField(controller: textNombreController),
+                      SizedBox(height: 5),
+                      Text('salidas', style: TextStyle()),
+                      TextField(
+                        controller: textSalidaController,
+                      ),
+                      SizedBox(height: 5),
+                    ],
                   ),
-                  SizedBox(height: 5),
-                  Text('comentarios', style: TextStyle()),
-                  TextField(
-                    controller: textComentariosController,
-                  ),
-                  SizedBox(height: 5),
-                  Text('latLng', style: TextStyle()),
-                  TextField(
-                    controller: textLatLngController,
-                  ),
+                ),
+                actions: <Widget>[
+                  MaterialButton(
+                      child: Text('Agregar'),
+                      onPressed: () => addViajeToList(
+                            textNombreController.text,
+                            textSalidaController.text,
+                            // textVotesController.text as int
+                          ))
                 ],
-              ),
-            ),
-            actions: <Widget>[
-              MaterialButton(
-                  child: Text('Agregar'),
-                  onPressed: () => addViajeToList(
-                      textNombreController.text,
-                      textSalidaController.text,
-                      textComentariosController.text,
-                      textLatLngController.text))
-            ],
-          );
-        },
-      );
+              ));
     }
 
     showCupertinoDialog(
         context: context,
-        builder: (_) {
-          return CupertinoAlertDialog(
-            title: Text('Nuevo viaje'),
-            content: Container(
-              height: 300,
-              child: Column(
-                children: [
-                  Text('nombre', style: TextStyle()),
-                  CupertinoTextField(
-                    controller: textNombreController,
-                  ),
-                  SizedBox(height: 5),
-                  Text('salida', style: TextStyle()),
-                  CupertinoTextField(
-                    controller: textSalidaController,
-                  ),
-                  SizedBox(height: 5),
-                  Text('comentarios', style: TextStyle()),
-                  CupertinoTextField(
-                    controller: textComentariosController,
-                  ),
-                  SizedBox(height: 5),
-                  Text('latLng', style: TextStyle()),
-                  CupertinoTextField(
-                    controller: textLatLngController,
-                  ),
-                ],
+        builder: (_) => CupertinoAlertDialog(
+              title: Text('Nuevo viaje'),
+              content: Container(
+                child: Column(
+                  children: [
+                    Text('nombre', style: TextStyle()),
+                    CupertinoTextField(
+                      controller: textNombreController,
+                    ),
+                    SizedBox(height: 5),
+                    Text('salidas', style: TextStyle()),
+                    CupertinoTextField(
+                      controller: textSalidaController,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            actions: <Widget>[
-              CupertinoDialogAction(
-                isDefaultAction: true,
-                child: Text('Agregar'),
-                onPressed: () => addViajeToList(
-                    textNombreController.text,
-                    textSalidaController.text,
-                    textComentariosController.text,
-                    textLatLngController.text),
-              ),
-              CupertinoDialogAction(
-                  isDestructiveAction: true,
-                  child: Text('Cancelar'),
-                  onPressed: () => Navigator.pop(context))
-            ],
-          );
-        });
+              actions: <Widget>[
+                CupertinoDialogAction(
+                    isDefaultAction: true,
+                    child: Text('Agregar'),
+                    onPressed: () {
+                      addViajeToList(
+                        textNombreController.text,
+                        textSalidaController.text,
+                        // textVotesController.text as int
+                      );
+                      // print(
+                      // '${textNombreController.text + textSalidaController.text}');
+                    }),
+                CupertinoDialogAction(
+                    isDestructiveAction: true,
+                    child: Text('Cancelar'),
+                    onPressed: () => Navigator.pop(context))
+              ],
+            ));
   }
 
-  void addViajeToList(
-      String nombre, String salida, String comentarios, String latLng) {
-    print(nombre);
-    print(salida);
-    print(comentarios);
-    print(latLng);
-
-    if (nombre.length > 1 && salida.length > 4) {
+  void addViajeToList(String nombre, String horaSalida) {
+    print('addViajeToList ${nombre + horaSalida}');
+    if (nombre.length > 1 && horaSalida.length > 4) {
       // Agregar
-      this.trip.add(new Trip(
-          id: DateTime.now().toString(),
-          name: nombre,
-          salida: salida,
-          descripcion: comentarios));
-      setState(() {});
+      // emitir: add-viaje
+      // { nombre: nombre, salidas: salidas }
+      print('${nombre + horaSalida}');
+      final socketService = Provider.of<SocketService>(context, listen: false);
+
+      socketService.emit('add-viaje', {'nombre': nombre, 'salida': horaSalida});
     }
     Navigator.pop(context);
   }

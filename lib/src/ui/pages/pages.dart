@@ -1,10 +1,11 @@
 // AUTH ROUTES
 export '../../ui/pages/auth/register_page.dart';
 export '../../ui/pages/auth/login_page.dart';
-export '../../ui/pages/auth/register_page.dart';
+
 export '../../ui/pages/access/auth_check.dart';
 
 // PREVIUS_PAGES
+export '../../ui/pages/access/status_page.dart';
 export '../../ui/pages/access/loading_page.dart';
 export '../../ui/pages/access/gps_access_page.dart';
 // USER PAGES
