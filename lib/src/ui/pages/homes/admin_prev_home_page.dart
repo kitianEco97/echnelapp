@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:echnelapp/src/data/services/services.dart';
 import '../../widgets/widgets.dart';
-import '../../ui/admin_routes.dart';
+import '../../../ui/routes/admin_routes.dart';
 
 class HomeAdminMainPage extends StatefulWidget {
   const HomeAdminMainPage({Key? key}) : super(key: key);
@@ -43,10 +43,6 @@ class _HomeAdminMainPageState extends State<HomeAdminMainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: myBNB,
-      // * QUEDA POR HACER LA REDIRECCION DEPENDIENDO DE EL ROL DE USUARIO QUE SE TENGA
-      // ! SELECCIONAR DESDE EL LOCALSTORAGE EL ROL QUE FUE GUARDADO
-      //body: AdminRoutes(index: index),
-      // body: DriverRoutes(index: index),
       body: AdminRoutes(index: index),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../widgets/widgets.dart';
-import '../../ui/driver_routes.dart';
+import '../../../ui/routes/driver_routes.dart';
 
 class DriverHomeMainPage extends StatefulWidget {
   const DriverHomeMainPage({Key? key}) : super(key: key);
@@ -28,10 +28,6 @@ class _DriverHomeMainPageState extends State<DriverHomeMainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: myBNB,
-      // * QUEDA POR HACER LA REDIRECCION DEPENDIENDO DE EL ROL DE USUARIO QUE TENGA
-      // ! SELECCIONAR DESDE EL LOCALSTORAGE EL ROL QUE FUE GUARDADO
-      //body: AdminRoutes(index: index),
-      // body: DriverRoutes(index: index),
       body: DriverRoutes(index: index),
     );
   }

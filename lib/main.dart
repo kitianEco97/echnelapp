@@ -7,7 +7,7 @@ import 'firebase_options.dart';
 
 import 'package:echnelapp/src/blocs/blocs.dart';
 import 'package:echnelapp/src/data/services/services.dart';
-import 'package:echnelapp/src/ui/pages/pages.dart';
+import 'package:echnelapp/src/ui/routes/routers.dart';
 
 void main() async {
   //? FIREBASE CONFIGS
@@ -45,21 +45,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Samella',
-      //? STAUS: estado de la conexión al socket service
-      // initialRoute: 'status',
-      // home: HomeAdminMainPage(),
-      home: LoadingPage(),
-      // home: LoginPage(),
-      routes: {
-        'admin/home': (context) => HomeAdminMainPage(),
-        'admin/tutorial': (context) => AdminTutorialPage(),
-        'user/home': (context) => UserHomeMainPage(),
-        'driver/home': (context) => DriverHomeMainPage(),
-        'viaje': (context) => AdminViajePage(),
-        'login': (context) => LoginPage(),
-        'register': (context) => RegisterPage(),
-        'status': (context) => StatusPage(),
-      },
+      initialRoute: 'login',
+      routes: appRoutes,
       scaffoldMessengerKey: NotificationsService.messengerKey,
       theme: ThemeData.light().copyWith(
           appBarTheme: AppBarTheme(

@@ -1,4 +1,6 @@
 // AUTH ROUTES
+export '../../ui/pages/auth-firebase/login_firebase_page.dart';
+export '../../ui/pages/auth-firebase/register_firebase_page.dart';
 export '../../ui/pages/auth/register_page.dart';
 export '../../ui/pages/auth/login_page.dart';
 
@@ -31,9 +33,9 @@ export '../../ui/pages/admin/admin_viajes_page.dart';
 export '../../ui/pages/admin/admin_viaje_page.dart';
 
 // MAIN HOMES
-export 'homes/admin_home_page.dart';
-export 'homes/driver_home_page.dart';
-export 'homes/home_page.dart';
+export 'homes/admin_prev_home_page.dart';
+export 'homes/driver_prev_home_page.dart';
+export 'homes/user_prev_home_page.dart';
 
 // OTHERS
 export 'loading_usr_page.dart';

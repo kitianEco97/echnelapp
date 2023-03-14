@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../widgets/widgets.dart';
-import '../../ui/user_routes.dart';
+import '../../../ui/routes/user_routes.dart';
 
 class UserHomeMainPage extends StatefulWidget {
   const UserHomeMainPage({Key? key}) : super(key: key);
@@ -30,8 +30,6 @@ class _UserHomeMainPageState extends State<UserHomeMainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: myBNB,
-      //body: AdminRoutes(index: index),
-      // body: DriverRoutes(index: index),
       body: UserRoutes(index: index),
     );
   }
