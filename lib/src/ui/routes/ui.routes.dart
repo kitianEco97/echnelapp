@@ -1,1 +1,1 @@
-export 'package:echnelapp/src/ui/ui/user_routes.dart';
+export 'package:echnelapp/src/ui/routes/user_routes.dart';

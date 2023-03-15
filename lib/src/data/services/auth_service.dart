@@ -2,69 +2,22 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import 'package:http/http.dart' as http;
 
-class AuthService extends ChangeNotifier {
-  final String _baseUrl = 'identitytoolkit.googleapis.com';
-  final String _firebaseToken = 'AIzaSyBcytoCbDUARrX8eHpcR-Bdrdq0yUmSjf8';
+import 'package:echnelapp/src/global/environment.dart';
+import 'package:echnelapp/src/data/models/models.dart';
 
-  final storage = new FlutterSecureStorage();
+class AuthService with ChangeNotifier {
+  Usuario? usuario;
+  bool _autenticando = false;
 
-  // Si retornamos algo, es un error, si no, todo bien!
-  Future<String?> createUser(String email, String password) async {
-    final Map<String, dynamic> authData = {
-      'email': email,
-      'password': password,
-      'returnSecureToken': true
-    };
+  final _storage = new FlutterSecureStorage();
 
-    final url =
-        Uri.https(_baseUrl, '/v1/accounts:signUp', {'key': _firebaseToken});
+  bool get autenticando => this._autenticando;
 
-    final resp = await http.post(url, body: json.encode(authData));
-    final Map<String, dynamic> decodedResp = json.decode(resp.body);
-
-    if (decodedResp.containsKey('idToken')) {
-      // Token hay que guardarlo en un lugar seguro
-      await storage.write(key: 'token', value: decodedResp['idToken']);
-      // decodedResp['idToken'];
-      return null;
-    } else {
-      return decodedResp['error']['message'];
-    }
-  }
-
-  Future<String?> login(String email, String password) async {
-    final Map<String, dynamic> authData = {
-      'email': email,
-      'password': password,
-      'returnSecureToken': true
-    };
-
-    final url = Uri.https(
-        _baseUrl, '/v1/accounts:signInWithPassword', {'key': _firebaseToken});
-
-    final resp = await http.post(url, body: json.encode(authData));
-    final Map<String, dynamic> decodedResp = json.decode(resp.body);
-
-    if (decodedResp.containsKey('idToken')) {
-      // Token hay que guardarlo en un lugar seguro
-      // decodedResp['idToken'];
-      await storage.write(key: 'token', value: decodedResp['idToken']);
-      return null;
-    } else {
-      return decodedResp['error']['message'];
-    }
-  }
-
-  Future logout() async {
-    await storage.delete(key: 'token');
-    return;
-  }
-
-  Future<String> readToken() async {
-    return await storage.read(key: 'token') ?? '';
+  set autenticando(bool valor) {
+    this._autenticando = valor;
+    notifyListeners();
   }
 
   // Getters del token de forma estática
@@ -76,6 +29,75 @@ class AuthService extends ChangeNotifier {
 
   static Future<void> deleteToken() async {
     final _storage = new FlutterSecureStorage();
+    await _storage.delete(key: 'token');
+  }
+
+  Future<bool> login(String email, String password) async {
+    this.autenticando = true;
+
+    final data = {'email': email, 'password': password};
+
+    var url = Uri.parse('${Environment.apiUrl}/login');
+    final resp = await http.post(url,
+        body: jsonEncode(data), headers: {'Content-Type': 'application/json'});
+    this.autenticando = false;
+    if (resp.statusCode == 200) {
+      final loginResponse = loginResponseFromJson(resp.body);
+      this.usuario = loginResponse.usuario;
+      await this._guardarToken(loginResponse.token);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future register(String nombre, String email, String password) async {
+    this.autenticando = true;
+
+    final data = {'nombre': nombre, 'email': email, 'password': password};
+
+    final uri = Uri.parse('${Environment.apiUrl}/login/new');
+    final resp = await http.post(uri,
+        body: jsonEncode(data), headers: {'Content-Type': 'application/json'});
+
+    this.autenticando = false;
+
+    if (resp.statusCode == 200) {
+      final loginResponse = loginResponseFromJson(resp.body);
+      this.usuario = loginResponse.usuario;
+      await this._guardarToken(loginResponse.token);
+
+      return true;
+    } else {
+      final respBody = jsonDecode(resp.body);
+      return respBody['msg'];
+    }
+  }
+
+  Future<bool> isLoggedIn() async {
+    final token = await this._storage.read(key: 'token');
+
+    final uri = Uri.parse('${Environment.apiUrl}/login/renew');
+    final resp = await http.get(uri,
+        headers: {'Content-Type': 'application/json', 'x-token': token ?? ''});
+
+    if (resp.statusCode == 200) {
+      final loginResponse = loginResponseFromJson(resp.body);
+      this.usuario = loginResponse.usuario;
+      await this._guardarToken(loginResponse.token);
+
+      return true;
+    } else {
+      this.logout();
+      return false;
+    }
+  }
+
+  Future _guardarToken(String token) async {
+    return await _storage.write(key: 'token', value: token);
+  }
+
+  Future logout() async {
     await _storage.delete(key: 'token');
   }
 }

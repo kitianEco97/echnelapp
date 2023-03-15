@@ -30,6 +30,7 @@ class AppState extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthService()),
+        ChangeNotifierProvider(create: (_) => FirebaseAuthService()),
         ChangeNotifierProvider(create: (_) => FirebaseServices()),
         ChangeNotifierProvider(create: (_) => ViajesService()),
         ChangeNotifierProvider(create: (_) => SocketService()),
@@ -45,7 +46,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Samella',
-      initialRoute: 'login',
+      initialRoute: 'loading',
       routes: appRoutes,
       scaffoldMessengerKey: NotificationsService.messengerKey,
       theme: ThemeData.light().copyWith(

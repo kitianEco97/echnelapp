@@ -28,14 +28,8 @@ class _HomeAdminMainPageState extends State<HomeAdminMainPage> {
 
   @override
   void dispose() {
-    if (this.mounted) {
-      // check whether the state object is in tree
-      setState(() {
-        // make changes here
-      });
-    }
-    final socketService = Provider.of<SocketService>(context, listen: false);
-    socketService.socket.off('viajes-activos');
+    // final socketService = Provider.of<SocketService>(context, listen: false);
+    // socketService.socket.off('viajes-activos');
     super.dispose();
   }
 

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:echnelapp/src/ui/widgets/widgets.dart';
+import 'package:echnelapp/src/data/services/services.dart';
+import 'package:echnelapp/src/ui/herlpers/helpers.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -45,6 +48,7 @@ class __FormState extends State<_Form> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
     return Container(
       margin: EdgeInsets.only(top: 40),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -64,10 +68,20 @@ class __FormState extends State<_Form> {
           ),
           BotonAzul(
               text: 'Ingresar',
-              onPressed: () {
-                print(emailCtrl.text);
-                print(passCtrl.text);
-              })
+              onPressed: authService.autenticando
+                  ? null
+                  : () async {
+                      FocusScope.of(context).unfocus();
+                      final loginOk = await authService.login(
+                          emailCtrl.text.trim(), passCtrl.text.trim());
+                      if (loginOk == true) {
+                        // TODO: conectar al socket server
+                        Navigator.pushReplacementNamed(context, 'user/home');
+                      } else {
+                        mostrarAlerta(context, 'Login incorrecto',
+                            'Revise sus credenciales');
+                      }
+                    })
         ],
       ),
     );

@@ -16,6 +16,7 @@ export '../../ui/pages/user/user_info_page.dart';
 export '../../ui/pages/user/user_map_page.dart';
 export '../../ui/pages/user/user_session_page.dart';
 export '../../ui/pages/user/user_tutorial_page.dart';
+export '../../ui/pages/user/user_chat_page.dart';
 
 // DRIVER PAGES
 export '../../ui/pages/driver/driver_home_page.dart';

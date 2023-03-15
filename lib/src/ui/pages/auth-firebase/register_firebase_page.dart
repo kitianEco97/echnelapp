@@ -126,8 +126,9 @@ class _LoginForm extends StatelessWidget {
                       : () async {
                           FocusScope.of(context).unfocus();
 
-                          final authService =
-                              Provider.of<AuthService>(context, listen: false);
+                          final authService = Provider.of<FirebaseAuthService>(
+                              context,
+                              listen: false);
 
                           if (!loginForm.isValidForm()) return;
                           loginForm.isLoading = true;

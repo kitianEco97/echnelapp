@@ -11,7 +11,7 @@ class UserSessionPage extends StatelessWidget {
     // Create storage
     // final storage = new FlutterSecureStorage();
     // final socketService = Provider.of<SocketService>(context, listen: false);
-    final authService = Provider.of<AuthService>(context, listen: false);
+
     final socketService = Provider.of<SocketService>(context);
 
     return Scaffold(
@@ -22,11 +22,10 @@ class UserSessionPage extends StatelessWidget {
           child: GestureDetector(
             onTap: () {
               // Delete value
-              // socketService.disconnect(),
-              // storage.delete(key: 'rol'),
-              authService.logout();
+              //* socketService.disconnect(),
               Navigator.pushNamedAndRemoveUntil(
                   context, 'login', (route) => false);
+              AuthService.deleteToken();
             },
             child: Icon(Icons.exit_to_app),
           ),

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:echnelapp/src/data/services/services.dart';
+import 'package:echnelapp/src/data/models/usuario.dart';
 
 class UserTutorialPage extends StatefulWidget {
   const UserTutorialPage({Key? key}) : super(key: key);
@@ -8,94 +12,92 @@ class UserTutorialPage extends StatefulWidget {
 }
 
 class _UserTutorialPageState extends State<UserTutorialPage> {
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+  final usuarios = [
+    Usuario(online: true, email: 'test1@test.com', nombre: 'Maria', uid: '1'),
+    Usuario(
+        online: true, email: 'test2@test.com', nombre: 'Christian', uid: '2'),
+    Usuario(online: true, email: 'test3@test.com', nombre: 'Martina', uid: '3'),
+  ];
+
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+    final usuario = authService.usuario;
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-              child: Center(
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(top: 40, left: 10),
-                      child: Text(
-                        'Tutorial',
-                        style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black),
-                      ),
-                    ),
-                    Container(
-                        margin: EdgeInsets.only(top: 40, right: 10),
-                        child: Image.asset(
-                          'assets/dv-logo-black.png',
-                          width: 100,
-                          height: 100,
-                        )),
-                  ],
-                ),
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.70,
-                  child: ListView(
-                    children: [
-                      Container(
-                        width: 100,
-                        color: Colors.grey,
-                        child: Column(
-                          children: [
-                            Text(
-                              'tutorial de uso de la aplicación',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                            ),
-                            // Divider(height: 10, color: Colors.transparent),
-                            Container(
-                                margin: EdgeInsets.all(50),
-                                child: Center(
-                                  child: Icon(
-                                    Icons.usb_rounded,
-                                    color: Colors.white,
-                                  ),
-                                ))
-                          ],
-                        ),
-                      ),
-                      Container(
-                        width: 120,
-                        color: Colors.grey,
-                        child: Column(
-                          children: [
-                            Text(
-                              'pestañas de la app',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                            ),
-                            // Divider(height: 10, color: Colors.transparent),
-                            Container(
-                                margin: EdgeInsets.all(50),
-                                child: Center(
-                                  child: Icon(
-                                    Icons.forward,
-                                    color: Colors.white,
-                                  ),
-                                ))
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  color: Colors.transparent,
-                ),
-              ],
+        appBar: AppBar(
+          title: Text(
+            usuario!.nombre,
+            style: TextStyle(color: Colors.black),
+          ),
+          elevation: 1,
+          backgroundColor: Colors.white,
+          leading: IconButton(
+              onPressed: () {
+                // Delete value
+                //* socketService.disconnect(),
+                Navigator.pushNamedAndRemoveUntil(
+                    context, 'login', (route) => false);
+                AuthService.deleteToken();
+              },
+              icon: Icon(
+                Icons.exit_to_app,
+                color: Colors.black,
+              )),
+          actions: [
+            Container(
+              margin: EdgeInsets.only(right: 10),
+              child: Icon(Icons.check_circle, color: Colors.blue[400]),
+              // Icon(Icons.offline_bolt, color: Colors.red),
+            )
+          ],
+        ),
+        body: SmartRefresher(
+          controller: _refreshController,
+          enablePullDown: true,
+          onRefresh: _cargarUsuarios,
+          header: WaterDropHeader(
+            complete: Icon(
+              Icons.check,
+              color: Colors.blue,
             ),
-          )),
-        ],
+            waterDropColor: Colors.blue[400]!,
+          ),
+          child: _listViewUsuarios(),
+        ));
+  }
+
+  ListView _listViewUsuarios() {
+    return ListView.separated(
+        physics: BouncingScrollPhysics(),
+        itemBuilder: (_, i) => _usuarioListTile(usuarios[i]),
+        separatorBuilder: (_, i) => Divider(),
+        itemCount: usuarios.length);
+  }
+
+  ListTile _usuarioListTile(Usuario usuario) {
+    return ListTile(
+      title: Text(usuario.nombre),
+      subtitle: Text(usuario.email),
+      leading: CircleAvatar(
+        child: Text(usuario.nombre.substring(0, 2)),
+        backgroundColor: Colors.blue[100],
+      ),
+      trailing: Container(
+        width: 10,
+        height: 10,
+        decoration: BoxDecoration(
+            color: usuario.online ? Colors.green[300] : Colors.red,
+            borderRadius: BorderRadius.circular(100)),
       ),
     );
+  }
+
+  _cargarUsuarios() async {
+    // monitor network fetc h
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
   }
 }
