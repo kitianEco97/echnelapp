@@ -4,7 +4,7 @@ import 'package:echnelapp/src/data/services/services.dart';
 import 'package:echnelapp/src/ui/pages/pages.dart';
 
 class CheckAuthPage extends StatelessWidget {
-  const CheckAuthPage({Key? key}) : super(key: key);
+  const CheckAuthPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class CheckAuthPage extends StatelessWidget {
         future: checkLoginState(context),
         builder: (context, snapshot) {
           return Center(
-            child: Text('auth-verify'),
+            child: Text('auth-verify...'),
           );
         },
       ),
@@ -22,11 +22,12 @@ class CheckAuthPage extends StatelessWidget {
 
   Future checkLoginState(BuildContext context) async {
     final authService = Provider.of<AuthService>(context, listen: false);
+    final socketService = Provider.of<SocketService>(context, listen: false);
 
     final autenticado = await authService.isLoggedIn();
 
     if (autenticado) {
-      // TODO: conectar al socket server
+      socketService.connect();
       Navigator.pushReplacement(
           context,
           PageRouteBuilder(

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ViajesList extends StatefulWidget {
-  const ViajesList({Key? key}) : super(key: key);
+  const ViajesList({Key key}) : super(key: key);
 
   @override
   _ViajesListState createState() => _ViajesListState();

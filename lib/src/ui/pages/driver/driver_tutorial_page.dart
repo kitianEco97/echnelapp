@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DriverTutorialPage extends StatefulWidget {
-  const DriverTutorialPage({Key? key}) : super(key: key);
+  const DriverTutorialPage({Key key}) : super(key: key);
 
   @override
   State<DriverTutorialPage> createState() => _DriverTutorialPageState();

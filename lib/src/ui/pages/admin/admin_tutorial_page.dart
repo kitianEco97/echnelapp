@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import '../../../data/services/services.dart';
 
 class AdminTutorialPage extends StatefulWidget {
-  const AdminTutorialPage({Key? key}) : super(key: key);
+  const AdminTutorialPage({Key key}) : super(key: key);
 
   @override
   State<AdminTutorialPage> createState() => _AdminTutorialPageState();
@@ -69,10 +69,10 @@ class _AdminTutorialPageState extends State<AdminTutorialPage> {
       ),
       child: ListTile(
         leading: CircleAvatar(
-          child: Text(trip.nombre!.substring(0, 2)),
+          child: Text(trip.nombre.substring(0, 2)),
           backgroundColor: Colors.blue[100],
         ),
-        title: Text(trip.nombre!),
+        title: Text(trip.nombre),
         trailing: Text(
           '${trip.salida}',
           style: TextStyle(fontSize: 20),

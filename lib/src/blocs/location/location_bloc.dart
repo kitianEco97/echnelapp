@@ -9,7 +9,7 @@ part 'location_event.dart';
 part 'location_state.dart';
 
 class LocationBloc extends Bloc<LocationEvent, LocationState> {
-  StreamSubscription<Position>? positionStream;
+  StreamSubscription<Position> positionStream;
 
   LocationBloc() : super(const LocationState()) {
     on<OnStartFollowingUser>(

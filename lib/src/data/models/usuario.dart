@@ -4,16 +4,18 @@
 
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 Usuario usuarioFromJson(String str) => Usuario.fromJson(json.decode(str));
 
 String usuarioToJson(Usuario data) => json.encode(data.toJson());
 
 class Usuario {
   Usuario({
-    required this.nombre,
-    required this.email,
-    required this.online,
-    required this.uid,
+    @required this.nombre,
+    @required this.email,
+    @required this.online,
+    @required this.uid,
   });
 
   String nombre;

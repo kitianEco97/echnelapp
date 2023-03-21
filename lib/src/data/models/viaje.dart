@@ -4,23 +4,24 @@
 
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Viaje {
   Viaje(
-      {required this.available,
-      required this.name,
+      {@required this.available,
+      @required this.name,
       this.picture,
-      required this.salida,
+      @required this.salida,
       this.id,
       this.latLng});
 
   bool available;
   String name;
-  String? picture;
+  String picture;
   String salida;
-  String? id;
-  LatLng? latLng;
+  String id;
+  LatLng latLng;
 
   // factory Viaje.fromRawJson(String str) => Viaje.fromJson(json.decode(str));
 

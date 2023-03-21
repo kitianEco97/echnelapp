@@ -5,7 +5,7 @@ import '../../../blocs/blocs.dart';
 import '../pages.dart';
 
 class LoadingPage extends StatelessWidget {
-  const LoadingPage({Key? key}) : super(key: key);
+  const LoadingPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

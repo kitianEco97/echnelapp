@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 //import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class DriverSessionPage extends StatelessWidget {
-  const DriverSessionPage({Key? key}) : super(key: key);
+  const DriverSessionPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

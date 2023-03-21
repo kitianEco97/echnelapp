@@ -5,7 +5,7 @@ import 'package:echnelapp/src/data/models/models.dart';
 //import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AdminSessionPage extends StatefulWidget {
-  const AdminSessionPage({Key? key}) : super(key: key);
+  const AdminSessionPage({Key key}) : super(key: key);
 
   @override
   State<AdminSessionPage> createState() => _AdminSessionPageState();
@@ -26,7 +26,7 @@ class _AdminSessionPageState extends State<AdminSessionPage> {
           child: GestureDetector(
             onTap: () => {
               // Delete value
-              // socketService.disconnect(),
+              socketService.disconnect(),
               // storage.delete(key: 'rol'),
               Navigator.pushNamedAndRemoveUntil(
                   context, 'login', (route) => false),

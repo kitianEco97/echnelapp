@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../blocs/blocs.dart';
 
 class GpsAccessPage extends StatelessWidget {
-  const GpsAccessPage({Key? key}) : super(key: key);
+  const GpsAccessPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class GpsAccessPage extends StatelessWidget {
 
 class _AccessButton extends StatelessWidget {
   const _AccessButton({
-    Key? key,
+    Key key,
   }) : super(key: key);
 
   @override
@@ -52,7 +52,7 @@ class _AccessButton extends StatelessWidget {
 
 class _EnableGpsMessage extends StatelessWidget {
   const _EnableGpsMessage({
-    Key? key,
+    Key key,
   }) : super(key: key);
 
   @override

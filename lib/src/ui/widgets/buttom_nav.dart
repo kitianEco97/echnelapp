@@ -5,12 +5,15 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 class ButtomNavBarEch extends StatefulWidget {
   final Function currentIndex;
 
-  const ButtomNavBarEch({Key? key, required this.currentIndex})
+  const ButtomNavBarEch({Key key, @required this.currentIndex})
       : super(key: key);
 
   @override
   State<ButtomNavBarEch> createState() => _ButtomNavBarEchState();
 }
+
+@override
+void initState() {}
 
 class _ButtomNavBarEchState extends State<ButtomNavBarEch> {
   int index = 0;

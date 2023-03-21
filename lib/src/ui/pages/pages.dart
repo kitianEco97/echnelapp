@@ -1,6 +1,4 @@
 // AUTH ROUTES
-export '../../ui/pages/auth-firebase/login_firebase_page.dart';
-export '../../ui/pages/auth-firebase/register_firebase_page.dart';
 export '../../ui/pages/auth/register_page.dart';
 export '../../ui/pages/auth/login_page.dart';
 
@@ -11,11 +9,10 @@ export '../../ui/pages/access/status_page.dart';
 export '../../ui/pages/access/loading_page.dart';
 export '../../ui/pages/access/gps_access_page.dart';
 // USER PAGES
-export '../../ui/pages/user/user_home_page.dart';
+export 'user/user_prev_home_page_controller.dart';
+export '../../ui/pages/user/user_prev_home_page.dart';
 export '../../ui/pages/user/user_info_page.dart';
 export '../../ui/pages/user/user_map_page.dart';
-export '../../ui/pages/user/user_session_page.dart';
-export '../../ui/pages/user/user_tutorial_page.dart';
 export '../../ui/pages/user/user_chat_page.dart';
 
 // DRIVER PAGES
@@ -30,13 +27,10 @@ export '../../ui/pages/admin/admin_home_page.dart';
 export '../../ui/pages/admin/admin_map_page.dart';
 export '../../ui/pages/admin/admin_session_page.dart';
 export '../../ui/pages/admin/admin_tutorial_page.dart';
-export '../../ui/pages/admin/admin_viajes_page.dart';
-export '../../ui/pages/admin/admin_viaje_page.dart';
 
 // MAIN HOMES
-export 'homes/admin_prev_home_page.dart';
 export 'homes/driver_prev_home_page.dart';
-export 'homes/user_prev_home_page.dart';
+export 'user/user_prev_home_page.dart';
 
 // OTHERS
 export 'loading_usr_page.dart';

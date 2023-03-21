@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:echnelapp/src/ui/pages/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -8,7 +9,7 @@ import 'package:echnelapp/src/global/environment.dart';
 import 'package:echnelapp/src/data/models/models.dart';
 
 class AuthService with ChangeNotifier {
-  Usuario? usuario;
+  Usuario usuario;
   bool _autenticando = false;
 
   final _storage = new FlutterSecureStorage();
@@ -24,7 +25,7 @@ class AuthService with ChangeNotifier {
   static Future<String> getToken() async {
     final _storage = new FlutterSecureStorage();
     final token = await _storage.read(key: 'token');
-    return token!;
+    return token;
   }
 
   static Future<void> deleteToken() async {
@@ -33,20 +34,25 @@ class AuthService with ChangeNotifier {
   }
 
   Future<bool> login(String email, String password) async {
-    this.autenticando = true;
+    try {
+      this.autenticando = true;
 
-    final data = {'email': email, 'password': password};
+      final data = {'email': email, 'password': password};
 
-    var url = Uri.parse('${Environment.apiUrl}/login');
-    final resp = await http.post(url,
-        body: jsonEncode(data), headers: {'Content-Type': 'application/json'});
-    this.autenticando = false;
-    if (resp.statusCode == 200) {
-      final loginResponse = loginResponseFromJson(resp.body);
-      this.usuario = loginResponse.usuario;
-      await this._guardarToken(loginResponse.token);
-      return true;
-    } else {
+      var url = Uri.parse('${Environment.apiUrl}/login');
+      final resp = await http.post(url,
+          body: jsonEncode(data),
+          headers: {'Content-Type': 'application/json'});
+      this.autenticando = false;
+      if (resp.statusCode == 200) {
+        final loginResponse = loginResponseFromJson(resp.body);
+        this.usuario = loginResponse.usuario;
+        await this._guardarToken(loginResponse.token);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
       return false;
     }
   }
@@ -76,7 +82,6 @@ class AuthService with ChangeNotifier {
 
   Future<bool> isLoggedIn() async {
     final token = await this._storage.read(key: 'token');
-
     final uri = Uri.parse('${Environment.apiUrl}/login/renew');
     final resp = await http.get(uri,
         headers: {'Content-Type': 'application/json', 'x-token': token ?? ''});
@@ -88,7 +93,8 @@ class AuthService with ChangeNotifier {
 
       return true;
     } else {
-      this.logout();
+      this.logout(context);
+
       return false;
     }
   }
@@ -97,7 +103,7 @@ class AuthService with ChangeNotifier {
     return await _storage.write(key: 'token', value: token);
   }
 
-  Future logout() async {
+  Future logout(BuildContext context) async {
     await _storage.delete(key: 'token');
   }
 }

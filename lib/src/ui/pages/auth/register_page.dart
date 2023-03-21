@@ -8,7 +8,7 @@ import 'package:echnelapp/src/ui/widgets/widgets.dart';
 import 'package:echnelapp/src/data/services/services.dart';
 
 class RegisterPage extends StatelessWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+  const RegisterPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +55,7 @@ class __FormState extends State<_Form> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
 
     return Container(
       margin: EdgeInsets.only(top: 40),
@@ -74,7 +75,7 @@ class __FormState extends State<_Form> {
           ),
           CustomInput(
             icon: Icons.lock_outline,
-            placeholder: 'Confirma Contraseña',
+            placeholder: 'Contraseña',
             isPassword: true,
             textController: passCtrl,
           ),
@@ -89,7 +90,7 @@ class __FormState extends State<_Form> {
                           passCtrl.text.trim());
 
                       if (registroOk == true) {
-                        // TODO: conectar al socket server
+                        socketService.connect();
                         Navigator.pushReplacementNamed(context, 'user/home');
                       } else {
                         mostrarAlerta(

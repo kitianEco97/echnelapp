@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../widgets/widgets.dart';
-import '../../../ui/routes/driver_routes.dart';
 
 class DriverHomeMainPage extends StatefulWidget {
-  const DriverHomeMainPage({Key? key}) : super(key: key);
+  const DriverHomeMainPage({Key key}) : super(key: key);
 
   @override
   State<DriverHomeMainPage> createState() => _DriverHomeMainPageState();
@@ -12,7 +11,7 @@ class DriverHomeMainPage extends StatefulWidget {
 
 class _DriverHomeMainPageState extends State<DriverHomeMainPage> {
   int index = 0;
-  ButtomNavBarEch? myBNB;
+  ButtomNavBarEch myBNB;
 
   @override
   void initState() {
@@ -28,7 +27,6 @@ class _DriverHomeMainPageState extends State<DriverHomeMainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: myBNB,
-      body: DriverRoutes(index: index),
     );
   }
 }

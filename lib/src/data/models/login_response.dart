@@ -5,6 +5,7 @@
 import 'dart:convert';
 
 import 'package:echnelapp/src/data/models/usuario.dart';
+import 'package:flutter/material.dart';
 
 LoginResponse loginResponseFromJson(String str) =>
     LoginResponse.fromJson(json.decode(str));
@@ -13,9 +14,9 @@ String loginResponseToJson(LoginResponse data) => json.encode(data.toJson());
 
 class LoginResponse {
   LoginResponse({
-    required this.ok,
-    required this.usuario,
-    required this.token,
+    @required this.ok,
+    @required this.usuario,
+    @required this.token,
   });
 
   bool ok;
