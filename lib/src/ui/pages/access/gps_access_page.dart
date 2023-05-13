@@ -11,9 +11,7 @@ class GpsAccessPage extends StatelessWidget {
     return Scaffold(
       body: Center(child: BlocBuilder<GpsBloc, GpsState>(
         builder: (context, state) {
-          return !state.isGpsEnabled
-              ? const _EnableGpsMessage()
-              : const _AccessButton();
+          return !state.isGpsEnabled ? _EnableGpsMessage() : _AccessButton();
         },
       )
           //  _AccessButton(),

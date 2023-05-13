@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -7,7 +10,6 @@ import 'package:echnelapp/src/ui/herlpers/helpers.dart';
 import 'package:echnelapp/src/ui/widgets/widgets.dart';
 
 class LoginPage extends StatelessWidget {
-  final _storage = const FlutterSecureStorage();
   LoginPage({Key key}) : super(key: key);
 
   @override
@@ -29,7 +31,7 @@ class LoginPage extends StatelessWidget {
                       titulo: '¿No tienes cuenta?',
                       subtitulo: '¡Crea una ahora!'),
                   Text(
-                    'Terminos y condiciones de uso',
+                    'Echnelapp',
                     style: TextStyle(fontWeight: FontWeight.w200),
                   )
                 ],
@@ -52,7 +54,7 @@ class __FormState extends State<_Form> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
-    final socketService = Provider.of<SocketService>(context);
+
     return Container(
       margin: EdgeInsets.only(top: 40),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -72,22 +74,59 @@ class __FormState extends State<_Form> {
           ),
           BotonAzul(
               text: 'Ingresar',
-              onPressed: authService.autenticando
-                  ? null
-                  : () async {
-                      FocusScope.of(context).unfocus();
-                      final loginOk = await authService.login(
-                          emailCtrl.text.trim(), passCtrl.text.trim());
-                      if (loginOk == true) {
-                        socketService.connect();
-                        Navigator.pushReplacementNamed(context, 'user/home');
-                      } else {
-                        mostrarAlerta(context, 'Login incorrecto',
-                            'Revise sus credenciales');
-                      }
-                    })
+              onPressed: () async {
+                final _storage = new FlutterSecureStorage();
+                FocusScope.of(context).unfocus();
+                final loginOk = await authService.login(
+                    emailCtrl.text.trim(), passCtrl.text.trim());
+                if (loginOk == true) {
+                  final role = await _storage.read(key: 'role');
+                  if (role == 'admin') {
+                    Navigator.pushReplacementNamed(context, 'admin/home');
+                  } else if (role == 'driver') {
+                    Navigator.pushReplacementNamed(context, 'driver/home');
+                  } else if (role == 'user') {
+                    Navigator.pushReplacementNamed(context, 'user/home');
+                  }
+                } else {
+                  mostrarAlerta(
+                      context, 'Login incorrecto', 'Revise sus credenciales');
+                }
+              })
         ],
       ),
     );
+  }
+
+  mostrarAlerta(BuildContext context, String titulo, String subtitulo) {
+    if (Platform.isAndroid) {
+      return showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+                title: Text(titulo),
+                content: Text(subtitulo),
+                actions: [
+                  MaterialButton(
+                      child: Text('Ok'),
+                      elevation: 5,
+                      textColor: Colors.blue,
+                      onPressed: () => Navigator.pop(context))
+                ],
+              ));
+    }
+
+    showCupertinoDialog(
+        context: context,
+        builder: (_) => CupertinoAlertDialog(
+              title: Text(titulo),
+              content: Text(subtitulo),
+              actions: [
+                CupertinoDialogAction(
+                  isDefaultAction: true,
+                  child: Text('Ok'),
+                  onPressed: () => Navigator.pop(context),
+                )
+              ],
+            ));
   }
 }

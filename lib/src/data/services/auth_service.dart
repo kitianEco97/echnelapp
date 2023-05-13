@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:echnelapp/src/ui/pages/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -34,6 +33,7 @@ class AuthService with ChangeNotifier {
   }
 
   Future<bool> login(String email, String password) async {
+    final _storage = new FlutterSecureStorage();
     try {
       this.autenticando = true;
 
@@ -47,6 +47,9 @@ class AuthService with ChangeNotifier {
       if (resp.statusCode == 200) {
         final loginResponse = loginResponseFromJson(resp.body);
         this.usuario = loginResponse.usuario;
+        await _storage.write(key: 'role', value: loginResponse.usuario.role);
+        await _storage.write(key: 'uid', value: loginResponse.usuario.uid);
+
         await this._guardarToken(loginResponse.token);
         return true;
       } else {
@@ -60,7 +63,12 @@ class AuthService with ChangeNotifier {
   Future register(String nombre, String email, String password) async {
     this.autenticando = true;
 
-    final data = {'nombre': nombre, 'email': email, 'password': password};
+    final data = {
+      'nombre': nombre,
+      'email': email,
+      'password': password,
+      'role': 'user'
+    };
 
     final uri = Uri.parse('${Environment.apiUrl}/login/new');
     final resp = await http.post(uri,
@@ -93,7 +101,7 @@ class AuthService with ChangeNotifier {
 
       return true;
     } else {
-      this.logout(context);
+      this.logout();
 
       return false;
     }
@@ -103,7 +111,7 @@ class AuthService with ChangeNotifier {
     return await _storage.write(key: 'token', value: token);
   }
 
-  Future logout(BuildContext context) async {
-    await _storage.delete(key: 'token');
+  Future logout() async {
+    await _storage.deleteAll();
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:echnelapp/src/ui/pages/admin/admin_prev_home_page.dart';
 import 'package:echnelapp/src/ui/pages/pages.dart';
 
 final Map<String, Widget Function(BuildContext)> appRoutes = {
@@ -7,15 +6,24 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   // ignore: todo
   // TODO * ADMIN
   'admin/home': (context) => HomeAdminMainPage(),
-  'admin/tutorial': (context) => AdminTutorialPage(),
+  'admin/info': (context) => AdminGetTripPage(),
+  'admin/map': (context) => AdminMapPage(),
+  'admin/trip': (context) => AdminCreateTripPage(),
+
   // ? USER
   'user/home': (context) => UserHomeMainPage(),
-  'user/info': (context) => UserInfoPage(),
+  'user/info': (context) => UserGetTripPage(),
+  'user/trip': (context) => UserGetTripPage(),
   'user/map': (context) => UserMapPage(),
-  'chat': (context) => UserChatPage(),
+  'user/trip/detail': (context) => UserTripDetailPage(trip: null),
+
   // ! DRIVER
-  'driver/home': (context) => DriverHomeMainPage(),
+  'driver/home': (context) => DriverHomePage(),
+  'driver/info': (context) => DriverGetTripPage(),
+  'driver/trip': (context) => DriverGetTripPage(),
+  'driver/map': (context) => DriverMapPage(),
+  'driver/trip/detail': (context) => DriverTripDetailPage(trip: null),
+
   'login': (context) => LoginPage(),
   'register': (context) => RegisterPage(),
-  'status': (context) => StatusPage(),
 };

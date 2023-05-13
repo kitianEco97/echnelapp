@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:echnelapp/src/ui/herlpers/helpers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,7 +32,7 @@ class RegisterPage extends StatelessWidget {
                       titulo: '¿Ya tienes una cuenta?',
                       subtitulo: '¡Ingresa aqui!'),
                   Text(
-                    'Terminos y condiciones de uso',
+                    'Echnelapp',
                     style: TextStyle(fontWeight: FontWeight.w200),
                   )
                 ],
@@ -55,7 +56,6 @@ class __FormState extends State<_Form> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
-    final socketService = Provider.of<SocketService>(context);
 
     return Container(
       margin: EdgeInsets.only(top: 40),
@@ -81,24 +81,52 @@ class __FormState extends State<_Form> {
           ),
           BotonAzul(
               text: 'Registrar',
-              onPressed: authService.autenticando
-                  ? null
-                  : () async {
-                      final registroOk = await authService.register(
-                          nombreCtrl.text.trim(),
-                          emailCtrl.text.trim(),
-                          passCtrl.text.trim());
+              onPressed: () async {
+                final registroOk = await authService.register(
+                    nombreCtrl.text.trim(),
+                    emailCtrl.text.trim(),
+                    passCtrl.text.trim());
 
-                      if (registroOk == true) {
-                        socketService.connect();
-                        Navigator.pushReplacementNamed(context, 'user/home');
-                      } else {
-                        mostrarAlerta(
-                            context, 'Registro incorrecto', '$registroOk');
-                      }
-                    })
+                if (registroOk == true) {
+                  Navigator.pushReplacementNamed(context, 'user/home');
+                } else {
+                  mostrarAlerta(context, 'Registro incorrecto', '$registroOk');
+                }
+              })
         ],
       ),
     );
+  }
+
+  mostrarAlerta(BuildContext context, String titulo, String subtitulo) {
+    if (Platform.isAndroid) {
+      return showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+                title: Text(titulo),
+                content: Text(subtitulo),
+                actions: [
+                  MaterialButton(
+                      child: Text('Ok'),
+                      elevation: 5,
+                      textColor: Colors.blue,
+                      onPressed: () => Navigator.pop(context))
+                ],
+              ));
+    }
+
+    showCupertinoDialog(
+        context: context,
+        builder: (_) => CupertinoAlertDialog(
+              title: Text(titulo),
+              content: Text(subtitulo),
+              actions: [
+                CupertinoDialogAction(
+                  isDefaultAction: true,
+                  child: Text('Ok'),
+                  onPressed: () => Navigator.pop(context),
+                )
+              ],
+            ));
   }
 }

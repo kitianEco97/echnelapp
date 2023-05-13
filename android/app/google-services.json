@@ -21,7 +21,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC0kQvMDfMDI9hgdvmiZSSmNFbiBPwk7po"
+          "current_key": "AIzaSyAb65KXMnKkiN-mZUFzO-8GGCmZ6XW1FiA"
         }
       ],
       "services": {
@@ -30,6 +30,13 @@
             {
               "client_id": "409232038702-qdup49t0s83e6h12g8j2rao09cu0pon6.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "409232038702-qdj78ejle05l56lsnh3595tb12unplu9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.echnelapp.mp.echnelapp"
+              }
             }
           ]
         }

@@ -8,7 +8,6 @@ class DrawerUsr extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final socketService = Provider.of<SocketService>(context);
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -73,17 +72,9 @@ class DrawerUsr extends StatelessWidget {
                     context, 'user/info', (route) => false);
               }),
           ListTile(
-              title: Text('Mapa'),
-              trailing: Icon(Icons.location_on_outlined),
-              onTap: () async {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, 'user/map', (route) => false);
-              }),
-          ListTile(
               title: Text('Cerar sesión'),
               trailing: Icon(Icons.exit_to_app_outlined),
               onTap: () async {
-                socketService.disconnect();
                 Navigator.pushNamedAndRemoveUntil(
                     context, 'login', (route) => false);
                 AuthService.deleteToken();
