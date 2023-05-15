@@ -9,6 +9,7 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'admin/info': (context) => AdminGetTripPage(),
   'admin/map': (context) => AdminMapPage(),
   'admin/trip': (context) => AdminCreateTripPage(),
+  'admin/trip/update': (context) => AdminUpdateTripPage(),
 
   // ? USER
   'user/home': (context) => UserHomeMainPage(),

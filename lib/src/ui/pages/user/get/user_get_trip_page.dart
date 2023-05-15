@@ -30,10 +30,11 @@ class _UserGetTripPageState extends State<UserGetTripPage> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+        key: _con.key,
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(100),
           child: AppBar(
-            leading: MenuDrawer(),
+            leading: _menuDrawer(),
             bottom: TabBar(
                 indicatorColor: Colors.blue,
                 labelColor: Colors.white,
@@ -146,6 +147,21 @@ class _UserGetTripPageState extends State<UserGetTripPage> {
               )
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _menuDrawer() {
+    return GestureDetector(
+      onTap: _con.openDrawer,
+      child: Container(
+        margin: EdgeInsets.only(left: 20),
+        alignment: Alignment.centerLeft,
+        child: Image.asset(
+          'assets/menu.png',
+          width: 20,
+          height: 20,
         ),
       ),
     );

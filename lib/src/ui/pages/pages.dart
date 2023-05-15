@@ -25,3 +25,4 @@ export '../../ui/pages/admin/create/admin_create_trip_page.dart';
 export '../../ui/pages/admin/detail-trip/admin_trip_detail_page.dart';
 export '../../ui/pages/admin/get/admin_get_trip_page.dart';
 export '../../ui/pages/admin/map/admin_map_page.dart';
+export '../../ui/pages/admin/update/admin_update_trip_page.dart';

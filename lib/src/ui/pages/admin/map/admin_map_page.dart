@@ -27,10 +27,6 @@ class _AdminMapPageState extends State<AdminMapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: DrawerAdmin(),
-      // appBar: AppBar(
-      //   leading: MenuDrawer(),
-      //   title: Text('Viajes'),
-      // ),
       body: Stack(
         children: [
           _googleMaps(),

@@ -106,6 +106,7 @@ class TripService {
     try {
       var url = Uri.parse('${Environment.apiUrl}/$_api/updateTripToDispatched');
       String bodyParams = json.encode(trip);
+      print(bodyParams);
       final driverUid = await _storage.read(key: 'driveruid');
       Map<String, String> headers = {
         'Content-type': 'application/json',
@@ -159,6 +160,27 @@ class TripService {
       };
 
       final res = await http.put(url, headers: headers, body: bodyParams);
+      if (res.statusCode == 401) {
+        mostrarAlerta(context, 'error al aactualizar el Viaje',
+            'hay un error al actualizar el viaje intentelo denuevo');
+      }
+      final data = json.decode(res.body);
+      ResponseApi responseApi = await ResponseApi.fromJson(data);
+      return responseApi;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<ResponseApi> updateTripTo(Trip trip) async {
+    try {
+      var url = Uri.parse('${Environment.apiUrl}/$_api/updateTrip');
+      String bodyParams = json.encode(trip);
+      print(bodyParams);
+      Map<String, String> headers = {'Content-type': 'application/json'};
+
+      final res = await http.put(url, headers: headers, body: bodyParams);
+      print(res.body);
       if (res.statusCode == 401) {
         mostrarAlerta(context, 'error al aactualizar el Viaje',
             'hay un error al actualizar el viaje intentelo denuevo');

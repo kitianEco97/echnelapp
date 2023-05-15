@@ -165,13 +165,12 @@ class _AdminTripDetailPageState extends State<AdminTripDetailPage> {
 
   _buttonNextMapa() {
     AdminTripDetailController _con = new AdminTripDetailController();
-    final _storage = new FlutterSecureStorage();
 
     return Container(
-      margin: EdgeInsets.only(left: 30, right: 30, top: 30, bottom: 30),
+      margin: EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 10),
       child: ElevatedButton(
           onPressed: () async {
-            _con.updateToMap(context);
+            _con.updateTripTo(widget.trip);
           },
           style: ElevatedButton.styleFrom(
               primary: Colors.blue,
@@ -186,7 +185,7 @@ class _AdminTripDetailPageState extends State<AdminTripDetailPage> {
                   height: 50,
                   alignment: Alignment.center,
                   child: Text(
-                    'Ir al mapa',
+                    'Actualizar a en pana',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -194,10 +193,10 @@ class _AdminTripDetailPageState extends State<AdminTripDetailPage> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Container(
-                  margin: EdgeInsets.only(left: 80, top: 9),
+                  margin: EdgeInsets.only(left: 70, top: 9),
                   height: 30,
                   child: Icon(
-                    Icons.directions,
+                    Icons.stop_circle_outlined,
                     color: Colors.white,
                     size: 30,
                   ),

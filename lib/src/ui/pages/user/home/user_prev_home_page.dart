@@ -1,3 +1,4 @@
+import 'package:echnelapp/src/ui/pages/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:echnelapp/src/ui/widgets/widgets.dart';
 import 'package:provider/provider.dart';
@@ -12,15 +13,17 @@ class UserHomeMainPage extends StatefulWidget {
 }
 
 class _UserInfoPageState extends State<UserHomeMainPage> {
+  UserPrevHomePageController _con = new UserPrevHomePageController();
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
 
     return Scaffold(
+      key: _con.key,
       drawer: DrawerUsr(),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        leading: MenuDrawer(),
+        leading: _menuDrawer(),
         actions: [
           Container(
             margin: EdgeInsets.only(right: 20, top: 10),
@@ -194,6 +197,21 @@ class _UserInfoPageState extends State<UserHomeMainPage> {
             ),
           )),
         ],
+      ),
+    );
+  }
+
+  Widget _menuDrawer() {
+    return GestureDetector(
+      onTap: _con.openDrawer,
+      child: Container(
+        margin: EdgeInsets.only(left: 20),
+        alignment: Alignment.centerLeft,
+        child: Image.asset(
+          'assets/menu.png',
+          width: 20,
+          height: 20,
+        ),
       ),
     );
   }

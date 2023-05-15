@@ -41,16 +41,13 @@ class DriverMapController {
 
   TripService tripService = new TripService();
 
-  double _distanceBetween;
-
-  // IO.Socket? socket;
-
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
     trip = Trip.fromJson(
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>);
-    tripMarker = await createMarkerFromAssets('assets/trip.png');
+
+    tripMarker = await createMarkerFromAssets('assets/dv-logo.png');
     tripToMarker = await createMarkerFromAssets('assets/terminal.png');
 
     updateLocation();
@@ -75,10 +72,7 @@ class DriverMapController {
     }
   }
 
-  void isCloseToDriverPosition() {
-    _distanceBetween = Geolocator.distanceBetween(
-        _position.latitude, _position.longitude, 1.2, 1.2);
-  }
+  void isCloseToDriverPosition() {}
 
   void updateToFinish() async {
     ResponseApi responseApi = await tripService.updateTripToFinish(trip);
@@ -87,9 +81,8 @@ class DriverMapController {
 
   Future<void> setPolylines(LatLng from, LatLng to) async {
     PointLatLng pointFrom = PointLatLng(from.latitude, from.longitude);
-    ;
     PointLatLng pointTo = PointLatLng(to.latitude, to.longitude);
-    ;
+
     PolylineResult result = await PolylinePoints().getRouteBetweenCoordinates(
         Environment.API_KEY_MAPS, pointFrom, pointTo);
     for (PointLatLng point in result.points) {
@@ -155,9 +148,9 @@ class DriverMapController {
     _mapController.complete(controller);
   }
 
-  void dispose() {
-    _positionStream?.cancel();
-    // socket?.disconnect();
+  void dispose() async {
+    final socketService = Provider.of<SocketService>(context, listen: false);
+    await socketService.socket.disconnect();
   }
 
   void updateLocation() async {

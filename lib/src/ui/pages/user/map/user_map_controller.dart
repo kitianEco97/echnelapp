@@ -12,7 +12,6 @@ import 'package:echnelapp/src/data/models/models.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:socket_io_client/socket_io_client.dart';
 
 class UserMapController {
   BuildContext context;
@@ -48,17 +47,22 @@ class UserMapController {
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
-    tripMarker = await createMarkerFromAssets('assets/trip.png');
+    tripMarker = await createMarkerFromAssets('assets/dv-logo.png');
     tripMarkerUsr = await createMarkerFromAssets('assets/terminal.png');
     tripToMarkerUsr = await createMarkerFromAssets('assets/terminal.png');
     trip = Trip.fromJson(
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>);
+
+    addMarker('Til-Til', -33.0902654, -70.9233629, 'Paradero Escuela la Merced',
+        '', tripMarkerUsr);
+    addMarker('Santiago', -33.4509132, -70.6791715,
+        'Terminal de Estación central, Santiago ', '', tripToMarkerUsr);
+
     final uidUsrTrip = await _storage.read(key: 'uidUsrTrip');
 
     final socketService = Provider.of<SocketService>(context, listen: false);
 
     socketService.socket.on('position/$uidUsrTrip', (data) {
-      print('data $data');
       addMarker(
           'driverTrip', data['lat'], data['lng'], 'Tu viaje', '', tripMarker);
     });
@@ -89,12 +93,19 @@ class UserMapController {
         points: points,
         width: 6);
 
+    Polyline polylineTrip = Polyline(
+        polylineId: PolylineId('polyusr'),
+        color: Colors.red,
+        points: points,
+        width: 6);
+
     polylines.add(polyline);
+    polylines.add(polylineTrip);
 
     refresh();
   }
 
-  void addMarker(String markerId, double lat, double lng, String title,
+  addMarker(String markerId, double lat, double lng, String title,
       String content, BitmapDescriptor iconMarker) {
     MarkerId id = MarkerId(markerId);
     Marker marker = Marker(
@@ -136,9 +147,9 @@ class UserMapController {
     }
   }
 
-  void dispose() {
+  void dispose() async {
     final socketService = Provider.of<SocketService>(context, listen: false);
-    socketService.socket.disconnect();
+    await socketService.socket.disconnect();
   }
 
   void onMapCreated(GoogleMapController controller) {
@@ -152,15 +163,11 @@ class UserMapController {
       await _determinePosition();
       _position = await Geolocator.getCurrentPosition();
 
-      animatedCameraToPosition(_position.latitude, _position.longitude);
-
-      addMarker('Til-Til', -33.0902654, -70.9233629,
-          'Paradero Escuela la Merced', '', tripMarkerUsr);
-      addMarker('Santiago', -33.4509132, -70.6791715,
-          'Terminal de Estación central, Santiago ', '', tripToMarkerUsr);
+      // animatedCameraToPosition(_position.latitude, _position.longitude);
 
       LatLng from = new LatLng(-33.4509132, -70.6791715);
       LatLng to = new LatLng(-33.0902654, -70.9233629);
+
       setPolylines(from, to);
       refresh();
     } catch (e) {

@@ -1,4 +1,4 @@
-import 'package:echnelapp/src/data/services/trip_service.dart';
+import 'package:echnelapp/src/ui/pages/driver/home/driver_prev_home_page_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:echnelapp/src/ui/widgets/widgets.dart';
 
@@ -10,13 +10,14 @@ class DriverHomePage extends StatefulWidget {
 }
 
 class DriverHomePageState extends State<DriverHomePage> {
+  DriverHomeController _con = new DriverHomeController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: DrawerDriver(),
+      key: _con.key,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        leading: MenuDrawer(),
+        leading: _menuDrawer(),
         actions: [
           Container(
             margin: EdgeInsets.only(right: 20, top: 10),
@@ -30,6 +31,7 @@ class DriverHomePageState extends State<DriverHomePage> {
           ),
         ],
       ),
+      drawer: DrawerDriver(),
       body: Stack(
         children: [
           Container(
@@ -193,6 +195,21 @@ class DriverHomePageState extends State<DriverHomePage> {
             ),
           )),
         ],
+      ),
+    );
+  }
+
+  Widget _menuDrawer() {
+    return GestureDetector(
+      onTap: _con.openDrawer,
+      child: Container(
+        margin: EdgeInsets.only(left: 20),
+        alignment: Alignment.centerLeft,
+        child: Image.asset(
+          'assets/menu.png',
+          width: 20,
+          height: 20,
+        ),
       ),
     );
   }

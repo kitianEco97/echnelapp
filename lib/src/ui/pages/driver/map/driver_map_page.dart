@@ -159,6 +159,7 @@ class _DriverMapPageState extends State<DriverMapPage> {
       onMapCreated: _con.onMapCreated,
       myLocationButtonEnabled: true,
       myLocationEnabled: true,
+      zoomControlsEnabled: true,
       markers: Set<Marker>.of(_con.markers.values),
       polylines: _con.polylines,
     );

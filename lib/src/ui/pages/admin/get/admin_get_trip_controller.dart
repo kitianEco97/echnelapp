@@ -7,6 +7,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 class AdminGetTripController {
   BuildContext context;
   Function refresh;
+  GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
 
   Usuario usuario;
   List<Trip> trips = [];
@@ -37,5 +38,9 @@ class AdminGetTripController {
         builder: (context) => AdminTripDetailPage(
               trip: trip,
             ));
+  }
+
+  void openDrawer() {
+    key.currentState?.openDrawer();
   }
 }

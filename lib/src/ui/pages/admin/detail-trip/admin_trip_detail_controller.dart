@@ -29,8 +29,8 @@ class AdminTripDetailController {
     ResponseApi responseApi = await tripService.updateTripToEnCamino(trip);
   }
 
-  void updateToMap(context) async {
-    Navigator.pushNamed(context, 'admin/map');
+  void updateTripTo(trip) async {
+    ResponseApi responseApi = await tripService.updateTripTo(trip);
   }
 
   void getUsuarios() async {
