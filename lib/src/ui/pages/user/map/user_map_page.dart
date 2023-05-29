@@ -76,7 +76,7 @@ class _UserMapPageState extends State<UserMapPage> {
                   ? 'espere...'
                   : _con.trip?.descripcion,
               _con.trip?.nombre == 'santiago'
-                  ? 'Terminal Interregional Estación central'
+                  ? 'Terminal Estación central'
                   : 'Primera parada Escuela La Merced',
               Icons.my_location),
           Divider(color: Colors.grey[400]),
@@ -157,7 +157,7 @@ class _UserMapPageState extends State<UserMapPage> {
       mapType: MapType.normal,
       initialCameraPosition: _con.initialPosition,
       onMapCreated: _con.onMapCreated,
-      myLocationButtonEnabled: true,
+      myLocationButtonEnabled: Platform.isAndroid ? true : false,
       myLocationEnabled: true,
       zoomControlsEnabled: true,
       markers: Set<Marker>.of(_con.markers.values),

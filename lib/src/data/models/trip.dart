@@ -8,6 +8,7 @@ class Trip {
   String uid;
   String nombre;
   String descripcion;
+  String comuna;
   double lat;
   double lng;
   bool online;
@@ -19,6 +20,7 @@ class Trip {
       {this.uid,
       this.nombre,
       this.descripcion,
+      this.comuna,
       this.lat,
       this.lng,
       this.online,
@@ -29,6 +31,7 @@ class Trip {
         uid: json["uid"] is int ? json["uid"].toString() : json["uid"],
         nombre: json["nombre"],
         descripcion: json["descripcion"],
+        comuna: json["comuna"],
         lat: json["lat"] is String
             ? double.parse(json["lat"].toDouble())
             : json["lat"],
@@ -52,6 +55,7 @@ class Trip {
         "uid": uid,
         "nombre": nombre,
         "descripcion": descripcion,
+        "comuna": comuna,
         "lat": lat,
         "lng": lng,
         "online": online,

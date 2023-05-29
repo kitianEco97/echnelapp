@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:echnelapp/src/data/services/services.dart';
-import 'package:echnelapp/src/ui/herlpers/helpers.dart';
 import 'package:echnelapp/src/ui/widgets/widgets.dart';
 
 class LoginPage extends StatelessWidget {
@@ -74,25 +73,28 @@ class __FormState extends State<_Form> {
           ),
           BotonAzul(
               text: 'Ingresar',
-              onPressed: () async {
-                final _storage = new FlutterSecureStorage();
-                FocusScope.of(context).unfocus();
-                final loginOk = await authService.login(
-                    emailCtrl.text.trim(), passCtrl.text.trim());
-                if (loginOk == true) {
-                  final role = await _storage.read(key: 'role');
-                  if (role == 'admin') {
-                    Navigator.pushReplacementNamed(context, 'admin/home');
-                  } else if (role == 'driver') {
-                    Navigator.pushReplacementNamed(context, 'driver/home');
-                  } else if (role == 'user') {
-                    Navigator.pushReplacementNamed(context, 'user/home');
-                  }
-                } else {
-                  mostrarAlerta(
-                      context, 'Login incorrecto', 'Revise sus credenciales');
-                }
-              })
+              onPressed: authService.autenticando
+                  ? null
+                  : () async {
+                      final _storage = new FlutterSecureStorage();
+                      FocusScope.of(context).unfocus();
+                      final loginOk = await authService.login(
+                          emailCtrl.text.trim(), passCtrl.text.trim());
+                      if (loginOk == true) {
+                        final role = await _storage.read(key: 'role');
+                        if (role == 'admin') {
+                          Navigator.pushReplacementNamed(context, 'admin/home');
+                        } else if (role == 'driver') {
+                          Navigator.pushReplacementNamed(
+                              context, 'driver/home');
+                        } else if (role == 'user') {
+                          Navigator.pushReplacementNamed(context, 'user/home');
+                        }
+                      } else {
+                        mostrarAlerta(context, 'Login incorrecto',
+                            'Revise sus credenciales');
+                      }
+                    })
         ],
       ),
     );

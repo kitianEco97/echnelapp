@@ -24,7 +24,7 @@ class UserGetTripController {
     getTrips();
   }
 
-  Future<List<Trip>> getTripsByStatus(String status) async {
+  Future<void> getTripsByStatus(String status) async {
     return await _tripService.getByStatus(status);
   }
 

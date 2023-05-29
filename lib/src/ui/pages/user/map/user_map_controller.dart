@@ -29,6 +29,7 @@ class UserMapController {
   BitmapDescriptor tripMarker;
   BitmapDescriptor tripMarkerUsr;
   BitmapDescriptor tripToMarkerUsr;
+  BitmapDescriptor userPosition;
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
   TripService _tripService = new TripService();
@@ -44,12 +45,15 @@ class UserMapController {
 
   final _storage = new FlutterSecureStorage();
 
+  LatLng to;
+
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
     tripMarker = await createMarkerFromAssets('assets/dv-logo.png');
     tripMarkerUsr = await createMarkerFromAssets('assets/terminal.png');
     tripToMarkerUsr = await createMarkerFromAssets('assets/terminal.png');
+    // userPosition = await createMarkerFromAssets('assets/terminal.png');
     trip = Trip.fromJson(
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>);
 
@@ -65,6 +69,8 @@ class UserMapController {
     socketService.socket.on('position/$uidUsrTrip', (data) {
       addMarker(
           'driverTrip', data['lat'], data['lng'], 'Tu viaje', '', tripMarker);
+      // setPolylines(LatLng(data['lat'], data['lng']),
+      //     LatLng(_position.latitude, _position.longitude));
     });
 
     tripService.init(context, refresh);
@@ -93,14 +99,29 @@ class UserMapController {
         points: points,
         width: 6);
 
-    Polyline polylineTrip = Polyline(
-        polylineId: PolylineId('polyusr'),
+    polylines.add(polyline);
+
+    refresh();
+  }
+
+  Future<void> setPolylines2(LatLng from, LatLng to) async {
+    PointLatLng pointFrom = PointLatLng(from.latitude, from.longitude);
+    ;
+    PointLatLng pointTo = PointLatLng(to.latitude, to.longitude);
+    ;
+    PolylineResult result = await PolylinePoints().getRouteBetweenCoordinates(
+        Environment.API_KEY_MAPS, pointFrom, pointTo);
+    for (PointLatLng point in result.points) {
+      points.add(LatLng(point.latitude, point.longitude));
+    }
+
+    Polyline polyline2 = Polyline(
+        polylineId: PolylineId('polyusr2'),
         color: Colors.red,
         points: points,
         width: 6);
 
-    polylines.add(polyline);
-    polylines.add(polylineTrip);
+    polylines.add(polyline2);
 
     refresh();
   }
@@ -163,12 +184,9 @@ class UserMapController {
       await _determinePosition();
       _position = await Geolocator.getCurrentPosition();
 
-      // animatedCameraToPosition(_position.latitude, _position.longitude);
+      // addMarker('userPosition', _position.latitude, _position.longitude,
+      //     'tu posición', 'tu posición', userPosition);
 
-      LatLng from = new LatLng(-33.4509132, -70.6791715);
-      LatLng to = new LatLng(-33.0902654, -70.9233629);
-
-      setPolylines(from, to);
       refresh();
     } catch (e) {
       print(e);

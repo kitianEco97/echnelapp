@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:echnelapp/src/data/services/trip_service.dart';
 import 'package:echnelapp/src/global/environment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -10,8 +9,6 @@ import 'package:location/location.dart' as location;
 import 'package:echnelapp/src/data/models/models.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:socket_io_client/socket_io_client.dart';
 
 import '../../../../data/services/services.dart';
 

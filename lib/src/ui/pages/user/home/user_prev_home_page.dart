@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:echnelapp/src/ui/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../data/models/models.dart';
 import '../../../../data/services/auth_service.dart';
 
 class UserHomeMainPage extends StatefulWidget {
@@ -62,12 +63,7 @@ class _UserInfoPageState extends State<UserHomeMainPage> {
                               Divider(height: 10, color: Colors.transparent),
                               Container(
                                   margin: EdgeInsets.all(50),
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.bus_alert,
-                                      color: Colors.white,
-                                    ),
-                                  ))
+                                  child: Center(child: _dropDownTrips())),
                             ],
                           ),
                         ),
@@ -199,6 +195,57 @@ class _UserInfoPageState extends State<UserHomeMainPage> {
         ],
       ),
     );
+  }
+
+  Widget _dropDownTrips() {
+    // AdminTripDetailController _con = new AdminTripDetailController();
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 33),
+      child: Material(
+        elevation: 2.0,
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+        child: Container(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: DropdownButton(
+                  underline: Container(
+                    alignment: Alignment.centerRight,
+                    child: Icon(
+                      Icons.arrow_drop_down_circle,
+                      color: Colors.blue,
+                    ),
+                  ),
+                  elevation: 3,
+                  isExpanded: true,
+                  hint: Text(
+                    'Selecciona tu comuna',
+                    style: TextStyle(color: Colors.grey, fontSize: 16),
+                  ),
+                  items: _dropDownItems(),
+                  value: '_con.idDriver',
+                  onChanged: (option) {
+                    setState(() {
+                      // _con.idDriver = option as String;
+                      // _storage.write(key: 'driveruid', value: option);
+                    });
+                  },
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  List<DropdownMenuItem<String>> _dropDownItems() {
+    List<DropdownMenuItem<String>> list = [];
+
+    return list;
   }
 
   Widget _menuDrawer() {

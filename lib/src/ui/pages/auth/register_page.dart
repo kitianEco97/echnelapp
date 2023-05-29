@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:echnelapp/src/ui/herlpers/helpers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -52,6 +51,7 @@ class __FormState extends State<_Form> {
   final emailCtrl = TextEditingController();
   final nombreCtrl = TextEditingController();
   final passCtrl = TextEditingController();
+  final confirmPassCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -79,20 +79,40 @@ class __FormState extends State<_Form> {
             isPassword: true,
             textController: passCtrl,
           ),
+          CustomInput(
+            icon: Icons.lock,
+            placeholder: 'Confirmar Contraseña',
+            isPassword: true,
+            textController: confirmPassCtrl,
+          ),
           BotonAzul(
               text: 'Registrar',
-              onPressed: () async {
-                final registroOk = await authService.register(
-                    nombreCtrl.text.trim(),
-                    emailCtrl.text.trim(),
-                    passCtrl.text.trim());
+              onPressed: authService.autenticando
+                  ? null
+                  : () async {
+                      if (passCtrl.value.text != confirmPassCtrl.value.text) {
+                        mostrarAlerta(context, 'Registro incorrecto',
+                            'contraseñas no coinciden');
+                        return;
+                      }
+                      if (passCtrl.text.length < 6 ||
+                          confirmPassCtrl.text.length < 6) {
+                        mostrarAlerta(context, 'Registro incorrecto',
+                            'las contraseñas deben tener un minimo de 6 seis caracteres');
+                        return;
+                      }
+                      final registroOk = await authService.register(
+                          nombreCtrl.text.trim(),
+                          emailCtrl.text.trim(),
+                          passCtrl.text.trim());
 
-                if (registroOk == true) {
-                  Navigator.pushReplacementNamed(context, 'user/home');
-                } else {
-                  mostrarAlerta(context, 'Registro incorrecto', '$registroOk');
-                }
-              })
+                      if (registroOk == true) {
+                        Navigator.pushReplacementNamed(context, 'user/home');
+                      } else {
+                        mostrarAlerta(
+                            context, 'Registro incorrecto', '$registroOk');
+                      }
+                    })
         ],
       ),
     );

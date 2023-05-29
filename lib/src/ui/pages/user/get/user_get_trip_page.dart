@@ -15,6 +15,7 @@ class UserGetTripPage extends StatefulWidget {
 
 class _UserGetTripPageState extends State<UserGetTripPage> {
   UserGetTripController _con = new UserGetTripController();
+  List<String> statusFor = ['Estacionado', 'EnCamino', 'Finalizado'];
 
   @override
   void initState() {
@@ -67,6 +68,12 @@ class _UserGetTripPageState extends State<UserGetTripPage> {
           }).toList(),
           //  return;
           // }),
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.refresh),
+          onPressed: () {
+            setState(() {});
+          },
         ),
       ),
     );

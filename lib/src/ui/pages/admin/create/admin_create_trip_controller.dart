@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:echnelapp/src/ui/herlpers/helpers.dart';
 import 'package:echnelapp/src/data/models/models.dart';
 import 'package:echnelapp/src/data/services/trip_service.dart';
 
@@ -28,7 +27,7 @@ class AdminCreateTripController {
     String descripcion = descripcionCtrl.text.trim();
 
     if (nombre.isEmpty || descripcion.isEmpty) {
-      mostrarAlerta(context, 'Error', 'debe ingresar todos los campo');
+      mostrarAlerta(context, 'Error', 'debe ingresar todos los campos');
       return;
     }
 
@@ -36,7 +35,7 @@ class AdminCreateTripController {
 
     ResponseApi responseApi = await _tripService.createTrip(trip);
     mostrarAlerta(context, 'Ok', 'el viaje se creo correctamente');
-
+    Navigator.pushNamedAndRemoveUntil(context, 'admin/info', (route) => false);
     if (responseApi.data != null) {
       nombreCtrl.text = '';
       descripcionCtrl.text = '';

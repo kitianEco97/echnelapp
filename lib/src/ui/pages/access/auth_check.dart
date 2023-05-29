@@ -8,8 +8,6 @@ class CheckAuthPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context);
-
     return Scaffold(
       body: FutureBuilder(
         future: checkLoginState(context),
@@ -33,7 +31,9 @@ class CheckAuthPage extends StatelessWidget {
           PageRouteBuilder(
               pageBuilder: (_, __, ___) => authService.usuario.role == 'user'
                   ? UserHomeMainPage()
-                  : DriverHomePage() ?? HomeAdminMainPage(),
+                  : authService.usuario.role == 'driver'
+                      ? DriverHomePage()
+                      : HomeAdminMainPage(),
               transitionDuration: Duration(milliseconds: 0)));
     } else {
       Navigator.pushReplacementNamed(context, 'login');

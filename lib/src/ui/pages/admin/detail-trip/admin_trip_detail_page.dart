@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:echnelapp/src/ui/herlpers/mostrar_alerta.dart';
+import 'package:echnelapp/src/ui/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:echnelapp/src/data/models/models.dart';
@@ -17,6 +19,7 @@ class AdminTripDetailPage extends StatefulWidget {
 
 class _AdminTripDetailPageState extends State<AdminTripDetailPage> {
   AdminTripDetailController _con = new AdminTripDetailController();
+
   final _storage = new FlutterSecureStorage();
 
   Trip trip;
@@ -255,6 +258,8 @@ class _textDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AdminTripDetailController _con = new AdminTripDetailController();
+
     return Column(
       children: [
         Row(

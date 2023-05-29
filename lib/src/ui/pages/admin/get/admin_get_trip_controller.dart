@@ -43,4 +43,9 @@ class AdminGetTripController {
   void openDrawer() {
     key.currentState?.openDrawer();
   }
+
+  void deleteTrip(uid) async {
+    await _tripService.deleteTrip(uid);
+    refresh();
+  }
 }

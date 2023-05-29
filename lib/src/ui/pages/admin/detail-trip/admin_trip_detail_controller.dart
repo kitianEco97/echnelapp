@@ -9,6 +9,9 @@ class AdminTripDetailController {
   BuildContext context;
   Function refresh;
 
+  TextEditingController nombreCtrl = new TextEditingController();
+  TextEditingController descripcionCtrl = new TextEditingController();
+
   Trip trip;
   List<Usuario> usuarios = [];
   UsuariosService usuariosService = new UsuariosService();
@@ -35,6 +38,11 @@ class AdminTripDetailController {
 
   void getUsuarios() async {
     usuarios = await usuariosService.getDrivers();
+    refresh();
+  }
+
+  void deleteTrip(id) async {
+    await tripService.deleteTrip(id);
     refresh();
   }
 }

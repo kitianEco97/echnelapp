@@ -77,76 +77,92 @@ class _AdminGetTripPageState extends State<AdminGetTripPage> {
     //   },
     //   child: Container(),
     // );
-    return GestureDetector(
-      onTap: () {
-        _con.openBottomSheet(trip);
-      },
-      child: Container(
+    return Container(
         height: 160,
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-        child: Card(
-          elevation: 3.0,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          child: Stack(
-            children: [
-              Positioned(
-                  child: Container(
-                width: MediaQuery.of(context).size.width * 1,
-                height: 30,
-                decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        topRight: Radius.circular(15))),
-                child: Container(
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Viaje ${trip.uid}',
-                    style: TextStyle(fontSize: 15, color: Colors.white),
-                  ),
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: () {
+                _con.deleteTrip(trip.uid);
+                print(trip.uid);
+              },
+              child: Container(
+                color: Colors.red,
+                child: Icon(
+                  Icons.delete,
+                  color: Colors.white,
                 ),
-              )),
-              Container(
-                margin: EdgeInsets.only(top: 40, left: 20, right: 20),
-                child: Column(
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                _con.openBottomSheet(trip);
+              },
+              child: Card(
+                elevation: 3.0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15)),
+                child: Stack(
                   children: [
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 5),
-                      alignment: Alignment.centerLeft,
-                      width: double.infinity,
-                      child: Text(
-                        'Dirección: ${trip.nombre}',
-                        style: TextStyle(fontSize: 13),
+                    Positioned(
+                        child: Container(
+                      width: MediaQuery.of(context).size.width * 1,
+                      height: 30,
+                      decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              topRight: Radius.circular(15))),
+                      child: Container(
+                        width: double.infinity,
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Viaje ${trip.uid}',
+                          style: TextStyle(fontSize: 15, color: Colors.white),
+                        ),
                       ),
-                    ),
+                    )),
                     Container(
-                      margin: EdgeInsets.symmetric(vertical: 5),
-                      alignment: Alignment.centerLeft,
-                      width: double.infinity,
-                      child: Text(
-                        'Salida: ${trip.descripcion}',
-                        style: TextStyle(fontSize: 13),
+                      margin: EdgeInsets.only(top: 40, left: 20, right: 20),
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.symmetric(vertical: 5),
+                            alignment: Alignment.centerLeft,
+                            width: double.infinity,
+                            child: Text(
+                              'Dirección: ${trip.nombre}',
+                              style: TextStyle(fontSize: 13),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(vertical: 5),
+                            alignment: Alignment.centerLeft,
+                            width: double.infinity,
+                            child: Text(
+                              'Salida: ${trip.descripcion}',
+                              style: TextStyle(fontSize: 13),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(vertical: 5),
+                            alignment: Alignment.centerLeft,
+                            width: double.infinity,
+                            child: Text(
+                              'Estado: ${trip.status}',
+                              style: TextStyle(fontSize: 13),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 5),
-                      alignment: Alignment.centerLeft,
-                      width: double.infinity,
-                      child: Text(
-                        'Estado: ${trip.status}',
-                        style: TextStyle(fontSize: 13),
-                      ),
-                    ),
+                    )
                   ],
                 ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+              ),
+            ),
+          ],
+        ));
   }
 
   Widget _menuDrawer() {

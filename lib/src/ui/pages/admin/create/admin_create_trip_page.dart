@@ -35,7 +35,7 @@ class _AdminCreateTripPageState extends State<AdminCreateTripPage> {
             margin: EdgeInsets.only(left: 15, right: 15),
             child: CustomInput(
               icon: Icons.bus_alert_outlined,
-              placeholder: 'Nombre del viaje',
+              placeholder: 'Dirección',
               textController: _con.nombreCtrl,
             ),
           ),
@@ -43,7 +43,7 @@ class _AdminCreateTripPageState extends State<AdminCreateTripPage> {
             margin: EdgeInsets.only(left: 15, right: 15),
             child: CustomInput(
               icon: Icons.description_outlined,
-              placeholder: 'Descripción',
+              placeholder: 'Hora salida',
               textController: _con.descripcionCtrl,
             ),
           )

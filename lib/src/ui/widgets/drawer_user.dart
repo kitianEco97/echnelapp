@@ -8,6 +8,7 @@ class DrawerUsr extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthService>(context);
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -20,7 +21,7 @@ class DrawerUsr extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Nombre de usuario',
+                    '${auth.usuario.nombre}',
                     style: TextStyle(
                         fontSize: 18,
                         color: Colors.white,
@@ -28,16 +29,7 @@ class DrawerUsr extends StatelessWidget {
                     maxLines: 1,
                   ),
                   Text(
-                    'Email',
-                    style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic),
-                    maxLines: 1,
-                  ),
-                  Text(
-                    'Telefono',
+                    '${auth.usuario.email}',
                     style: TextStyle(
                         fontSize: 13,
                         color: Colors.white,

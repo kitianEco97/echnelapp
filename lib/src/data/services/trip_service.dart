@@ -41,6 +41,27 @@ class TripService {
     }
   }
 
+  Future<List<Trip>> getByLine(String line) async {
+    try {
+      var url = Uri.parse('${Environment.apiUrl}/$_api/findByStatus/$line');
+
+      Map<String, String> headers = {'Content-type': 'application/json'};
+
+      final res = await http.get(url, headers: headers);
+
+      if (res.statusCode == 401) {
+        mostrarAlerta(context, 'error al obtener los Viajes',
+            'hay un error al obtener los viajes intentelo denuevo');
+      }
+
+      final data = json.decode(res.body); // Trips
+      Trip trip = Trip.fromJsonList(data);
+      return trip.toList;
+    } catch (e) {
+      return [];
+    }
+  }
+
   Future<List<Trip>> findByDriverAndStatus() async {
     final _storage = new FlutterSecureStorage();
     var id = await _storage.read(key: 'uid');
@@ -71,8 +92,6 @@ class TripService {
       Map<String, String> headers = {'Content-type': 'application/json'};
 
       final res = await http.get(url, headers: headers);
-
-      //
 
       final data = json.decode(res.body); // Trips
       Trip trip = Trip.fromJsonList(data);
@@ -182,7 +201,27 @@ class TripService {
       final res = await http.put(url, headers: headers, body: bodyParams);
       print(res.body);
       if (res.statusCode == 401) {
-        mostrarAlerta(context, 'error al aactualizar el Viaje',
+        mostrarAlerta(context, 'error al actualizar el Viaje',
+            'hay un error al actualizar el viaje intentelo denuevo');
+      }
+      final data = json.decode(res.body);
+      ResponseApi responseApi = await ResponseApi.fromJson(data);
+      return responseApi;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<ResponseApi> deleteTrip(uid) async {
+    try {
+      var url = Uri.parse('${Environment.apiUrl}/$_api/delete/$uid');
+
+      Map<String, String> headers = {'Content-type': 'application/json'};
+
+      final res = await http.delete(url, headers: headers);
+      print(res.body);
+      if (res.statusCode == 401) {
+        mostrarAlerta(context, 'error al eliminar el Viaje',
             'hay un error al actualizar el viaje intentelo denuevo');
       }
       final data = json.decode(res.body);

@@ -6,8 +6,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:echnelapp/src/blocs/blocs.dart';
 import 'package:echnelapp/src/data/services/services.dart';
 import 'package:echnelapp/src/ui/routes/routers.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider(create: (context) => GpsBloc()),
@@ -15,7 +18,6 @@ void main() async {
     ],
     child: AppState(),
   ));
-  WidgetsFlutterBinding.ensureInitialized();
 }
 
 class AppState extends StatelessWidget {

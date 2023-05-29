@@ -1,5 +1,5 @@
-import 'package:echnelapp/src/global/environment.dart';
 import 'package:flutter/material.dart';
+import 'package:echnelapp/src/global/environment.dart';
 
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -19,7 +19,6 @@ class SocketService with ChangeNotifier {
   }
 
   void _initConfig() {
-    // Dart client
     this._socket = IO.io('${Environment.socketUrl}', {
       'transports': ['websocket'],
       'autoConnect': true
