@@ -12,14 +12,17 @@ import 'package:echnelapp/src/data/models/models.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_webservice/directions.dart' as GSM;
 
 class UserMapController {
   BuildContext context;
   Function refresh;
-  Position _position;
+  Position position;
 
   String addressName;
   LatLng addressLatLng;
+  String duration;
 
   CameraPosition initialPosition =
       CameraPosition(target: LatLng(-33.3240483, -70.7252671), zoom: 10);
@@ -39,13 +42,17 @@ class UserMapController {
   Set<Polyline> polylines = {};
   List<LatLng> points = [];
 
+  var origin = new Location();
+  var to = new Location();
+
+  var timeLat;
+  var timeLng;
+
   TripService tripService = new TripService();
 
   IO.Socket socket;
 
   final _storage = new FlutterSecureStorage();
-
-  LatLng to;
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -57,25 +64,64 @@ class UserMapController {
     trip = Trip.fromJson(
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>);
 
+    position = await Geolocator.getCurrentPosition();
+
     addMarker('Til-Til', -33.0902654, -70.9233629, 'Paradero Escuela la Merced',
         '', tripMarkerUsr);
     addMarker('Santiago', -33.4509132, -70.6791715,
         'Terminal de Estación central, Santiago ', '', tripToMarkerUsr);
 
+    // setPolylines(
+    //     LatLng(-33.0902654, -70.9233629), LatLng(-33.4509132, -70.6791715));
+
     final uidUsrTrip = await _storage.read(key: 'uidUsrTrip');
 
     final socketService = Provider.of<SocketService>(context, listen: false);
 
-    socketService.socket.on('position/$uidUsrTrip', (data) {
+    socketService.socket.on('position/$uidUsrTrip', (data) async {
       addMarker(
           'driverTrip', data['lat'], data['lng'], 'Tu viaje', '', tripMarker);
-      // setPolylines(LatLng(data['lat'], data['lng']),
-      //     LatLng(_position.latitude, _position.longitude));
+
+      timeLat = data['lat'];
+      timeLng = data['lng'];
+
+      setPolylines(LatLng(timeLat, timeLng),
+          LatLng(position.latitude, position.longitude));
+
+      getTime(
+          Location(latitude: position.latitude, longitude: position.longitude),
+          Location(latitude: timeLat, longitude: timeLng));
     });
 
     tripService.init(context, refresh);
 
     checkGps();
+  }
+
+  Future<String> getTime(Location o, Location t) async {
+    var duration;
+    GSM.GoogleMapsDirections directions =
+        GSM.GoogleMapsDirections(apiKey: '${Environment.API_KEY_MAPS}');
+    print(o.toString());
+    print(t.toString());
+    GSM.DirectionsResponse response = await directions.directions(
+        '${o.latitude},${o.longitude}', // Convierte Location en una cadena de coordenadas
+        '${t.latitude},${t.longitude}');
+
+    print('response status -> ${response.status}');
+
+    if (response.isOkay) {
+      var route = response.routes[0];
+      var leg = route.legs[0];
+      duration = leg.duration.text;
+      var durationInSeconds = leg.duration.value;
+      print('Duración estimada (en segundos): $durationInSeconds');
+      return '$duration';
+    } else {
+      // return 'Error al obtener las direcciones';
+      print('Error al obtener las direcciones: ${response}');
+    }
+    // return duration;
   }
 
   Future<List<Trip>> getTripsByStatus() async {
@@ -84,9 +130,8 @@ class UserMapController {
 
   Future<void> setPolylines(LatLng from, LatLng to) async {
     PointLatLng pointFrom = PointLatLng(from.latitude, from.longitude);
-    ;
     PointLatLng pointTo = PointLatLng(to.latitude, to.longitude);
-    ;
+
     PolylineResult result = await PolylinePoints().getRouteBetweenCoordinates(
         Environment.API_KEY_MAPS, pointFrom, pointTo);
     for (PointLatLng point in result.points) {
@@ -94,34 +139,12 @@ class UserMapController {
     }
 
     Polyline polyline = Polyline(
-        polylineId: PolylineId('polyusr'),
+        polylineId: PolylineId('poly'),
         color: Colors.red,
         points: points,
         width: 6);
 
     polylines.add(polyline);
-
-    refresh();
-  }
-
-  Future<void> setPolylines2(LatLng from, LatLng to) async {
-    PointLatLng pointFrom = PointLatLng(from.latitude, from.longitude);
-    ;
-    PointLatLng pointTo = PointLatLng(to.latitude, to.longitude);
-    ;
-    PolylineResult result = await PolylinePoints().getRouteBetweenCoordinates(
-        Environment.API_KEY_MAPS, pointFrom, pointTo);
-    for (PointLatLng point in result.points) {
-      points.add(LatLng(point.latitude, point.longitude));
-    }
-
-    Polyline polyline2 = Polyline(
-        polylineId: PolylineId('polyusr2'),
-        color: Colors.red,
-        points: points,
-        width: 6);
-
-    polylines.add(polyline2);
 
     refresh();
   }
@@ -169,8 +192,8 @@ class UserMapController {
   }
 
   void dispose() async {
-    final socketService = Provider.of<SocketService>(context, listen: false);
-    await socketService.socket.disconnect();
+    // final socketService = Provider.of<SocketService>(context, listen: false);
+    // await socketService.socket.disconnect();
   }
 
   void onMapCreated(GoogleMapController controller) {
@@ -182,10 +205,16 @@ class UserMapController {
   void updateLocation() async {
     try {
       await _determinePosition();
-      _position = await Geolocator.getCurrentPosition();
+      position = await Geolocator.getCurrentPosition();
 
-      // addMarker('userPosition', _position.latitude, _position.longitude,
+      // addMarker('userPosition', position.latitude, position.longitude,
       //     'tu posición', 'tu posición', userPosition);
+      LatLng from = new LatLng(position.latitude, position.longitude);
+      // LatLng to = new LatLng(-33.4509132, -70.6791715);
+
+      // getTime(origin, to);
+
+      // setPolylines(from, to);
 
       refresh();
     } catch (e) {
@@ -236,5 +265,9 @@ class UserMapController {
     }
 
     return await Geolocator.getCurrentPosition();
+  }
+
+  void back() {
+    Navigator.pop(context);
   }
 }

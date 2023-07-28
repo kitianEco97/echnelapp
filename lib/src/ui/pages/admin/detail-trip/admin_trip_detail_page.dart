@@ -188,7 +188,7 @@ class _AdminTripDetailPageState extends State<AdminTripDetailPage> {
                   height: 50,
                   alignment: Alignment.center,
                   child: Text(
-                    'Actualizar a en pana',
+                    'Actualizar a detenido',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -196,7 +196,7 @@ class _AdminTripDetailPageState extends State<AdminTripDetailPage> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Container(
-                  margin: EdgeInsets.only(left: 70, top: 9),
+                  margin: EdgeInsets.only(left: 50, top: 9),
                   height: 30,
                   child: Icon(
                     Icons.stop_circle_outlined,

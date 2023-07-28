@@ -30,6 +30,7 @@ class AdminTripDetailController {
 
   void updateTrip(trip) async {
     ResponseApi responseApi = await tripService.updateTripToEnCamino(trip);
+    Navigator.pop(context);
   }
 
   void updateTripTo(trip) async {

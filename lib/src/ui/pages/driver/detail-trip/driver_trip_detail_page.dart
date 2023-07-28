@@ -38,10 +38,10 @@ class _DriverTripDetailPageState extends State<DriverTripDetailPage> {
           _tripDirection(),
           Divider(),
           _tripName(widget: widget),
-          widget.trip.status == 'Estacionado'
-              ? _dropDownTrips(_con.usuarios)
-              : Container(),
-          _buttonNext()
+          // widget.trip.status == 'Finalizado'
+          //     ? _dropDownTrips(_con.usuarios)
+          //     : Container(),
+          widget.trip.status == 'Finalizado' ? Container() : _buttonNext()
         ],
       ),
     );
@@ -49,69 +49,6 @@ class _DriverTripDetailPageState extends State<DriverTripDetailPage> {
 
   void refresh() {
     setState(() {});
-  }
-
-  Widget _dropDownTrips(List<Usuario> usuarios) {
-    DriverTripDetailController _con = new DriverTripDetailController();
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 33),
-      child: Material(
-        elevation: 2.0,
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(5)),
-        child: Container(
-          padding: EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: DropdownButton(
-                  underline: Container(
-                    alignment: Alignment.centerRight,
-                    child: Icon(
-                      Icons.arrow_drop_down_circle,
-                      color: Colors.blue,
-                    ),
-                  ),
-                  elevation: 3,
-                  isExpanded: true,
-                  hint: Text(
-                    'Seleccionar conductor',
-                    style: TextStyle(color: Colors.grey, fontSize: 16),
-                  ),
-                  items: _dropDownItems(usuarios),
-                  value: _con.idDriver,
-                  onChanged: (option) {
-                    setState(() {
-                      _con.idDriver = option as String;
-                    });
-                  },
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  List<DropdownMenuItem<String>> _dropDownItems(List<Usuario> usuarios) {
-    List<DropdownMenuItem<String>> list = [];
-    usuarios.forEach((usuario) {
-      list.add(DropdownMenuItem(
-        child: Row(
-          children: [
-            Icon(Icons.person_2_outlined),
-            SizedBox(
-              width: 10,
-            ),
-            Text(usuario.nombre)
-          ],
-        ),
-        value: usuario.uid,
-      ));
-    });
-    return list;
   }
 
   _buttonNext() {
@@ -229,11 +166,8 @@ class _textDescription extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                'Estado: ${(widget.trip.status != 'EnCamino') ? 'Estacionado' : 'EnCamino'}',
-                style: Platform.isIOS
-                    ? TextStyle(fontSize: 30)
-                    : TextStyle(fontSize: 28),
-              ),
+                  'Estado: ${(widget.trip.status != 'EnCamino') ? 'Estacionado' : 'EnCamino'}',
+                  style: TextStyle(fontSize: 25)),
             ],
           ),
         ),

@@ -50,6 +50,8 @@ dependencies:
   permission_handler: ^10.2.0
   pull_to_refresh: ^2.0.0  
   socket_io_client: ^0.9.10
+  google_maps_webservice: ^0.0.20-nullsafety.2
+  url_launcher: ^6.1.0
 
 dev_dependencies:
   flutter_test:

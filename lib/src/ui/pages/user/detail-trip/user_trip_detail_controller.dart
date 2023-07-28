@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-import 'package:echnelapp/src/data/services/trip_service.dart';
-import 'package:echnelapp/src/ui/pages/pages.dart';
-import 'package:echnelapp/src/data/services/usuarios_service.dart';
-import 'package:echnelapp/src/ui/herlpers/helpers.dart';
 import 'package:echnelapp/src/data/models/models.dart';
+
+import '../../../../data/services/services.dart';
 
 class UserTripDetailController {
   BuildContext context;

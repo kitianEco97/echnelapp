@@ -38,9 +38,9 @@ class _DriverGetTripPageState extends State<DriverGetTripPage> {
                 labelColor: Colors.white,
                 unselectedLabelColor: Colors.green,
                 isScrollable: true,
-                tabs: List<Widget>.generate(_con.status.length, (index) {
+                tabs: List<Widget>.generate(1, (index) {
                   return Tab(
-                    child: Text(_con.status[index]),
+                    child: Text('EnCamino'),
                   );
                 })),
           ),
@@ -63,6 +63,12 @@ class _DriverGetTripPageState extends State<DriverGetTripPage> {
               },
             );
           }).toList(),
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.refresh),
+          onPressed: () {
+            setState(() {});
+          },
         ),
       ),
     );
