@@ -66,6 +66,12 @@ class _AdminGetTripPageState extends State<AdminGetTripPage> {
           //  return;
           // }),
         ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.refresh),
+          onPressed: () {
+            setState(() {});
+          },
+        ),
       ),
     );
   }

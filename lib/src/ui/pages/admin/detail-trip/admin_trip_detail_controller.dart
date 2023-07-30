@@ -30,11 +30,11 @@ class AdminTripDetailController {
 
   void updateTrip(trip) async {
     ResponseApi responseApi = await tripService.updateTripToEnCamino(trip);
-    Navigator.pop(context);
   }
 
   void updateTripTo(trip) async {
     ResponseApi responseApi = await tripService.updateTripTo(trip);
+    mostrarAlerta(context, 'Actualizado', 'Vaje actualizado correctamente');
   }
 
   void getUsuarios() async {
