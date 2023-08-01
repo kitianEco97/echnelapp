@@ -9,6 +9,7 @@ import 'package:location/location.dart' as location;
 import 'package:echnelapp/src/data/models/models.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 import '../../../../data/services/services.dart';
 
@@ -37,6 +38,7 @@ class DriverMapController {
   List<LatLng> points = [];
 
   TripService tripService = new TripService();
+  SocketService socketService = new SocketService();
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -44,7 +46,7 @@ class DriverMapController {
     trip = Trip.fromJson(
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>);
 
-    tripMarker = await createMarkerFromAssets('assets/dv-logo.png');
+    tripMarker = await createMarkerFromAssets('assets/trip.png');
     tripToMarker = await createMarkerFromAssets('assets/terminal.png');
 
     updateLocation();
@@ -59,9 +61,9 @@ class DriverMapController {
   }
 
   void emitPosition() {
-    final socket = Provider.of<SocketService>(context, listen: false);
+    // final socket = Provider.of<SocketService>(context, listen: false);
     if (_position != null) {
-      socket.emit('position', {
+      socketService.socket.emit('position', {
         'id_trip': trip.uid,
         'lat': _position.latitude,
         'lng': _position.longitude,

@@ -57,14 +57,15 @@ class UserMapController {
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
-    tripMarker = await createMarkerFromAssets('assets/dv-logo.png');
+    tripMarker = await createMarkerFromAssets('assets/trip.png');
     tripMarkerUsr = await createMarkerFromAssets('assets/terminal.png');
     tripToMarkerUsr = await createMarkerFromAssets('assets/terminal.png');
-    // userPosition = await createMarkerFromAssets('assets/terminal.png');
+    userPosition = await createMarkerFromAssets('assets/user-location');
     trip = Trip.fromJson(
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>);
 
-    position = await Geolocator.getCurrentPosition();
+    // position = await Geolocator.getCurrentPosition();
+    // position = await Geolocator.getLastKnownPosition();
 
     addMarker('Til-Til', -33.0902654, -70.9233629, 'Paradero Escuela la Merced',
         '', tripMarkerUsr);
@@ -88,9 +89,9 @@ class UserMapController {
       setPolylines(LatLng(timeLat, timeLng),
           LatLng(position.latitude, position.longitude));
 
-      getTime(
-          Location(latitude: position.latitude, longitude: position.longitude),
-          Location(latitude: timeLat, longitude: timeLng));
+      // getTime(
+      //     Location(latitude: position.latitude, longitude: position.longitude),
+      //     Location(latitude: timeLat, longitude: timeLng));
     });
 
     tripService.init(context, refresh);
@@ -98,6 +99,7 @@ class UserMapController {
     checkGps();
   }
 
+  // ! ES NECESARIO AGREGAR LA CUENTA DE FACTURACION PARA PODER HABILITAR LA API QUE USA ESTA FUNCION 'DIRECTIONS'
   Future<String> getTime(Location o, Location t) async {
     var duration;
     GSM.GoogleMapsDirections directions =
@@ -108,7 +110,7 @@ class UserMapController {
         '${o.latitude},${o.longitude}', // Convierte Location en una cadena de coordenadas
         '${t.latitude},${t.longitude}');
 
-    print('response status -> ${response.status}');
+    print('response status -> ${response.errorMessage}');
 
     if (response.isOkay) {
       var route = response.routes[0];
@@ -118,8 +120,7 @@ class UserMapController {
       print('Duración estimada (en segundos): $durationInSeconds');
       return '$duration';
     } else {
-      // return 'Error al obtener las direcciones';
-      print('Error al obtener las direcciones: ${response}');
+      return 'Error al obtener las direcciones ${response.errorMessage}';
     }
     // return duration;
   }
@@ -192,7 +193,6 @@ class UserMapController {
   }
 
   void dispose() async {
-    // final socketService = Provider.of<SocketService>(context, listen: false);
     // await socketService.socket.disconnect();
   }
 
@@ -205,10 +205,10 @@ class UserMapController {
   void updateLocation() async {
     try {
       await _determinePosition();
-      position = await Geolocator.getCurrentPosition();
+      position = await Geolocator.getLastKnownPosition();
 
-      // addMarker('userPosition', position.latitude, position.longitude,
-      //     'tu posición', 'tu posición', userPosition);
+      addMarker('iduser', position.latitude, position.longitude, 'Tu Posición',
+          '', userPosition);
       LatLng from = new LatLng(position.latitude, position.longitude);
       // LatLng to = new LatLng(-33.4509132, -70.6791715);
 

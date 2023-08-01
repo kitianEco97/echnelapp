@@ -64,7 +64,7 @@ class _UserMapPageState extends State<UserMapPage> {
 
   Widget _cardOrderInfo() {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.47,
+      height: MediaQuery.of(context).size.height * 0.39,
       width: double.infinity,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
@@ -72,7 +72,7 @@ class _UserMapPageState extends State<UserMapPage> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
+                color: Colors.grey.withOpacity(0.6),
                 spreadRadius: 5,
                 blurRadius: 7,
                 offset: Offset(0, 3))
@@ -88,24 +88,24 @@ class _UserMapPageState extends State<UserMapPage> {
                   : 'Primera parada Escuela La Merced',
               Icons.my_location),
           Divider(color: Colors.grey[400]),
-          FutureBuilder(
-            future: _con.getTime(
-              Location(
-                  latitude: _con.position?.latitude,
-                  longitude: _con.position?.longitude),
-              Location(latitude: _con.timeLat, longitude: _con.timeLng),
-            ),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.hasData) {
-                return _listTileTimer('Tiempo estimado de llegada',
-                    '${snapshot.data}', Icons.timelapse_outlined);
-              } else {
-                return CircularProgressIndicator(
-                  strokeWidth: 1,
-                );
-              }
-            },
-          ),
+          // FutureBuilder(
+          //   future: _con.getTime(
+          //     Location(
+          //         latitude: _con.position?.latitude,
+          //         longitude: _con.position?.longitude),
+          //     Location(latitude: _con.timeLat, longitude: _con.timeLng),
+          //   ),
+          //   builder: (BuildContext context, AsyncSnapshot snapshot) {
+          //     if (snapshot.hasData) {
+          //       return _listTileTimer('Tiempo estimado de llegada',
+          //           '${snapshot.data}', Icons.timelapse_outlined);
+          //     } else {
+          //       return CircularProgressIndicator(
+          //         strokeWidth: 1,
+          //       );
+          //     }
+          //   },
+          // ),
           _buttonNext()
         ],
       ),
