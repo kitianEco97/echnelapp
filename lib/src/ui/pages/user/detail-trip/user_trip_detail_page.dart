@@ -9,7 +9,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class UserTripDetailPage extends StatefulWidget {
   Trip trip;
 
-  UserTripDetailPage({Key key, this.trip}) : super(key: key);
+  UserTripDetailPage({Key key, @required this.trip}) : super(key: key);
 
   @override
   _UserTripDetailPageState createState() => _UserTripDetailPageState();
@@ -72,14 +72,10 @@ class _UserTripDetailPageState extends State<UserTripDetailPage> {
   }
 
   _buttonNext() {
-    UserTripDetailController _con = new UserTripDetailController();
-
     return Container(
       margin: EdgeInsets.only(left: 30, right: 30, top: 30, bottom: 30),
       child: ElevatedButton(
-          onPressed: () {
-            _con.updateTrip(widget.trip, context);
-          },
+          onPressed: _con.updateTrip,
           style: ElevatedButton.styleFrom(
               primary: Colors.blue,
               padding: EdgeInsets.symmetric(vertical: 5),

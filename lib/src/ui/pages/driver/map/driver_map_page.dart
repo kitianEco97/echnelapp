@@ -166,7 +166,8 @@ class _DriverMapPageState extends State<DriverMapPage> {
   }
 
   void refresh() {
-    if (!mounted) return;
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 }

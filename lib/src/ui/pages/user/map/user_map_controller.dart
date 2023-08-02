@@ -10,9 +10,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart' as location;
 import 'package:echnelapp/src/data/models/models.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/directions.dart' as GSM;
 
 class UserMapController {
@@ -60,12 +58,9 @@ class UserMapController {
     tripMarker = await createMarkerFromAssets('assets/trip.png');
     tripMarkerUsr = await createMarkerFromAssets('assets/terminal.png');
     tripToMarkerUsr = await createMarkerFromAssets('assets/terminal.png');
-    userPosition = await createMarkerFromAssets('assets/user-location');
+    // userPosition = await createMarkerFromAssets('assets/user-location');
     trip = Trip.fromJson(
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>);
-
-    // position = await Geolocator.getCurrentPosition();
-    // position = await Geolocator.getLastKnownPosition();
 
     addMarker('Til-Til', -33.0902654, -70.9233629, 'Paradero Escuela la Merced',
         '', tripMarkerUsr);
@@ -77,9 +72,13 @@ class UserMapController {
 
     final uidUsrTrip = await _storage.read(key: 'uidUsrTrip');
 
-    final socketService = Provider.of<SocketService>(context, listen: false);
+    socket = IO.io('${Environment.API_URL}trip/driver', <String, dynamic>{
+      'transports': ['websocket'],
+      'autoConnect': false
+    });
 
-    socketService.socket.on('position/$uidUsrTrip', (data) async {
+    socket.connect();
+    socket.on('position/$uidUsrTrip', (data) async {
       addMarker(
           'driverTrip', data['lat'], data['lng'], 'Tu viaje', '', tripMarker);
 
@@ -192,8 +191,8 @@ class UserMapController {
     }
   }
 
-  void dispose() async {
-    // await socketService.socket.disconnect();
+  void dispose() {
+    socket?.disconnect();
   }
 
   void onMapCreated(GoogleMapController controller) {
@@ -207,14 +206,8 @@ class UserMapController {
       await _determinePosition();
       position = await Geolocator.getLastKnownPosition();
 
-      addMarker('iduser', position.latitude, position.longitude, 'Tu Posición',
-          '', userPosition);
-      LatLng from = new LatLng(position.latitude, position.longitude);
-      // LatLng to = new LatLng(-33.4509132, -70.6791715);
-
-      // getTime(origin, to);
-
-      // setPolylines(from, to);
+      // addMarker('iduser', position.latitude, position.longitude, 'Tu Posición',
+      //     '', userPosition);
 
       refresh();
     } catch (e) {
@@ -269,5 +262,6 @@ class UserMapController {
 
   void back() {
     Navigator.pop(context);
+    socket.disconnect();
   }
 }

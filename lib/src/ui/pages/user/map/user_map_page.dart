@@ -24,10 +24,8 @@ class _UserMapPageState extends State<UserMapPage> {
   @override
   void initState() {
     super.initState();
-    SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
-      await _con.init(context, refresh);
-
-      setState(() {});
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      _con.init(context, refresh);
     });
   }
 
@@ -35,7 +33,9 @@ class _UserMapPageState extends State<UserMapPage> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _con.dispose();
+    final socketService = Provider.of<SocketService>(context, listen: false);
+    socketService.socket.off('position');
+    // _con.dispose();
   }
 
   @override
@@ -225,7 +225,8 @@ class _UserMapPageState extends State<UserMapPage> {
   }
 
   void refresh() {
-    if (!mounted) return;
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 }

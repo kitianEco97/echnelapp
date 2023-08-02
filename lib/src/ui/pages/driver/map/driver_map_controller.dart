@@ -8,8 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart' as location;
 import 'package:echnelapp/src/data/models/models.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:provider/provider.dart';
-import 'package:socket_io_client/socket_io_client.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../../../../data/services/services.dart';
 
@@ -39,6 +38,7 @@ class DriverMapController {
 
   TripService tripService = new TripService();
   SocketService socketService = new SocketService();
+  IO.Socket socket;
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -48,6 +48,12 @@ class DriverMapController {
 
     tripMarker = await createMarkerFromAssets('assets/trip.png');
     tripToMarker = await createMarkerFromAssets('assets/terminal.png');
+
+    socket = IO.io('${Environment.API_URL}trip/driver', <String, dynamic>{
+      'transports': ['websocket'],
+      'autoConnect': false
+    });
+    socket.connect();
 
     updateLocation();
     tripService.init(context, refresh);
@@ -61,9 +67,8 @@ class DriverMapController {
   }
 
   void emitPosition() {
-    // final socket = Provider.of<SocketService>(context, listen: false);
     if (_position != null) {
-      socketService.socket.emit('position', {
+      socket.emit('position', {
         'id_trip': trip.uid,
         'lat': _position.latitude,
         'lng': _position.longitude,
@@ -147,15 +152,18 @@ class DriverMapController {
     _mapController.complete(controller);
   }
 
-  void dispose() async {
-    final socketService = Provider.of<SocketService>(context, listen: false);
-    await socketService.socket.disconnect();
+  void dispose() {
+    _positionStream?.cancel();
+    socket.disconnect();
   }
 
   void updateLocation() async {
     try {
-      await _determinePosition();
-      _position = await Geolocator.getLastKnownPosition(); // LatLng
+      await _determinePosition(); // OBTENER LA POSICION ACTUAL Y TAMBIEN SOLICITAR LOS PERMISOS
+      _position = await Geolocator.getLastKnownPosition(); // LAT Y LNG
+      saveLocation();
+
+      animatedCameraToPosition(_position.latitude, _position.longitude);
       saveLocation();
 
       addMarker('Paradero Escuela la Merced', -33.0902654, -70.9233629,
@@ -170,17 +178,17 @@ class DriverMapController {
       _positionStream =
           Geolocator.getPositionStream().listen((Position position) {
         _position = position;
-        //! MARCADOR CON LA UBICACION DEL CONDUCTOR EN TIEMPO REAL
+        emitPosition();
+        //! MARCADOR EN TIEMPO REAL
         addMarker('iddriver', _position.latitude, _position.longitude,
             'Tu Posición', '', tripMarker);
-        emitPosition();
         animatedCameraToPosition(_position.latitude, _position.longitude);
         isCloseToDriverPosition();
 
         refresh();
       });
     } catch (e) {
-      print(e);
+      print('Error: $e');
     }
   }
 

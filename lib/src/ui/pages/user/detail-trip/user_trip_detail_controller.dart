@@ -23,7 +23,7 @@ class UserTripDetailController {
     refresh();
   }
 
-  void updateTrip(Trip trip, context) async {
+  void updateTrip() async {
     Navigator.pushNamed(context, 'user/map', arguments: trip.toJson() ?? '');
   }
 
