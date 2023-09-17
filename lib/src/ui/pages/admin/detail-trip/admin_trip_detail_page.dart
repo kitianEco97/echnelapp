@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:echnelapp/src/ui/herlpers/mostrar_alerta.dart';
-import 'package:echnelapp/src/ui/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:echnelapp/src/data/models/models.dart';
@@ -42,12 +40,14 @@ class _AdminTripDetailPageState extends State<AdminTripDetailPage> {
           _textDescription(widget: widget),
           _tripDirection(),
           _tripName(widget: widget),
-          widget.trip.status == 'Estacionado'
-              ? _dropDownTrips(_con.usuarios)
-              : Container(),
+          widget.trip.status != 'Estacionado'
+              ? Container()
+              : _dropDownTrips(_con.usuarios),
           widget.trip.status == 'Estacionado'
               ? _buttonNext()
-              : _buttonNextMapa(),
+              : widget.trip.status == 'Finalizado'
+                  ? Container()
+                  : _buttonNextMapa(),
         ],
       ),
     );
@@ -283,7 +283,7 @@ class _textDescription extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                'Estado: ${(widget.trip.status != 'EnCamino') ? 'Estacionado' : 'EnCamino'}',
+                'Estado: ${widget.trip.status == 'EnCamino' ? 'EnCamino' : widget.trip.status == 'Estacionado' ? 'Estacionado' : 'Finalizado'}',
                 style: Platform.isIOS
                     ? TextStyle(fontSize: 30)
                     : TextStyle(fontSize: 20),

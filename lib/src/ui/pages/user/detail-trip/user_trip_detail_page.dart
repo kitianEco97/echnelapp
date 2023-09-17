@@ -182,7 +182,7 @@ class _textDescription extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                'Estado: ${(widget.trip.status == 'EnCamino') ? 'EnCamino' : 'Estacionado' ?? 'Finalizado'}',
+                'Estado: ${widget.trip.status == 'EnCamino' ? 'EnCamino' : widget.trip.status == 'Estacionado' ? 'Estacionado' : 'Finalizado'}',
                 style: Platform.isIOS
                     ? TextStyle(fontSize: 30)
                     : TextStyle(fontSize: 20),

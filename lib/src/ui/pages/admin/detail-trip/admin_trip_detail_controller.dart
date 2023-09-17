@@ -1,9 +1,7 @@
 import 'package:echnelapp/src/data/services/trip_service.dart';
 import 'package:echnelapp/src/data/services/usuarios_service.dart';
-import 'package:echnelapp/src/ui/herlpers/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:echnelapp/src/data/models/models.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AdminTripDetailController {
   BuildContext context;
@@ -34,7 +32,7 @@ class AdminTripDetailController {
 
   void updateTripTo(trip) async {
     ResponseApi responseApi = await tripService.updateTripTo(trip);
-    mostrarAlerta(context, 'Actualizado', 'Vaje actualizado correctamente');
+    // mostrarAlerta(context, 'Actualizado', 'Vaje actualizado correctamente');
   }
 
   void getUsuarios() async {

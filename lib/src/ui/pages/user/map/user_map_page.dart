@@ -5,10 +5,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:echnelapp/src/ui/pages/user/map/user_map_controller.dart';
 import 'package:echnelapp/src/ui/widgets/widgets.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:provider/provider.dart';
-
-import '../../../../data/services/services.dart';
 
 class UserMapPage extends StatefulWidget {
   UserMapPage({Key key}) : super(key: key);
@@ -33,9 +29,7 @@ class _UserMapPageState extends State<UserMapPage> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    final socketService = Provider.of<SocketService>(context, listen: false);
-    socketService.socket.off('position');
-    // _con.dispose();
+    _con.dispose();
   }
 
   @override
@@ -50,8 +44,6 @@ class _UserMapPageState extends State<UserMapPage> {
           SafeArea(
             child: Column(
               children: [
-                // Text('${duration}'),
-
                 Spacer(),
                 _cardOrderInfo(),
               ],

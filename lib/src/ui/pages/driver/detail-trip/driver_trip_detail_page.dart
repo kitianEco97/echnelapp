@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:echnelapp/src/data/models/models.dart';
@@ -166,7 +164,7 @@ class _textDescription extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                  'Estado: ${(widget.trip.status != 'EnCamino') ? 'Estacionado' : 'EnCamino'}',
+                  'Estado: ${widget.trip.status == 'EnCamino' ? 'EnCamino' : widget.trip.status == 'Estacionado' ? 'Estacionado' : 'Finalizado'}',
                   style: TextStyle(fontSize: 25)),
             ],
           ),
